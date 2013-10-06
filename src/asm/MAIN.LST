@@ -1,0 +1,2834 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	main.asm
+	Object File:	main.hex
+	List File:	main.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				;; -------------------------------------------------------------------------------------------------
+				------
+    2:				;; -------------------------------------------------------------------------------------------------
+				------
+    3:				;;					PROGRAMA PRINCIPAL
+    4:				;; -------------------------------------------------------------------------------------------------
+				------
+    5:				;; -------------------------------------------------------------------------------------------------
+				------
+    6:
+    7:					$NOMOD51
+    8:				$INCLUDE(8052.MCU)		; Símbolos 8052
+    9: 1			;   8052 processor definition file
+   10: 1			;   ==============================
+   11: 1
+   12: 1	N	 80	P0	DATA	080H
+   13: 1	N	 81	SP	DATA	081H
+   14: 1	N	 82	DPL	DATA	082H
+   15: 1	N	 83	DPH	DATA	083H
+   16: 1	N	 87	PCON	DATA	087H
+   17: 1	N	 88	TCON	DATA	088H
+   18: 1	N	 89	TMOD	DATA	089H
+   19: 1	N	 8A	TL0	DATA	08AH
+   20: 1	N	 8B	TL1	DATA	08BH
+   21: 1	N	 8C	TH0	DATA	08CH
+   22: 1	N	 8D	TH1	DATA	08DH
+   23: 1	N	 90	P1	DATA	090H
+   24: 1	N	 98	SCON	DATA	098H
+   25: 1	N	 99	SBUF	DATA	099H
+   26: 1	N	 A0	P2	DATA	0A0H
+   27: 1	N	 A8	IE	DATA	0A8H
+   28: 1	N	 B0	P3	DATA	0B0H
+   29: 1	N	 B8	IP	DATA	0B8H
+   30: 1	N	 C8	T2CON	DATA	0C8H
+   31: 1	N	 CA	RCAP2L	DATA	0CAH
+   32: 1	N	 CB	RCAP2H	DATA	0CBH
+   33: 1	N	 CC	TL2	DATA	0CCH
+   34: 1	N	 CD	TH2	DATA	0CDH
+   35: 1	N	 D0	PSW	DATA	0D0H
+   36: 1	N	 E0	ACC	DATA	0E0H
+   37: 1	N	 F0	B	DATA	0F0H
+   38: 1
+   39: 1	N	 88	IT0	BIT	088H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   40: 1	N	 89	IE0	BIT	089H
+   41: 1	N	 8A	IT1	BIT	08AH
+   42: 1	N	 8B	IE1	BIT	08BH
+   43: 1	N	 8C	TR0	BIT	08CH
+   44: 1	N	 8D	TF0	BIT	08DH
+   45: 1	N	 8E	TR1	BIT	08EH
+   46: 1	N	 8F	TF1	BIT	08FH
+   47: 1	N	 90	T2	BIT	090H
+   48: 1	N	 91	T2EX	BIT	091H
+   49: 1	N	 98	RI	BIT	098H
+   50: 1	N	 99	TI	BIT	099H
+   51: 1	N	 9A	RB8	BIT	09AH
+   52: 1	N	 9B	TB8	BIT	09BH
+   53: 1	N	 9C	REN	BIT	09CH
+   54: 1	N	 9D	SM2	BIT	09DH
+   55: 1	N	 9E	SM1	BIT	09EH
+   56: 1	N	 9F	SM0	BIT	09FH
+   57: 1	N	 A8	EX0	BIT	0A8H
+   58: 1	N	 A9	ET0	BIT	0A9H
+   59: 1	N	 AA	EX1	BIT	0AAH
+   60: 1	N	 AB	ET1	BIT	0ABH
+   61: 1	N	 AC	ES	BIT	0ACH
+   62: 1	N	 AD	ET2	BIT	0ADH
+   63: 1	N	 AF	EA	BIT	0AFH
+   64: 1	N	 B0	RXD	BIT	0B0H
+   65: 1	N	 B1	TXD	BIT	0B1H
+   66: 1	N	 B2	INT0	BIT	0B2H
+   67: 1	N	 B3	INT1	BIT	0B3H
+   68: 1	N	 B4	T0	BIT	0B4H
+   69: 1	N	 B5	T1	BIT	0B5H
+   70: 1	N	 B6	WR	BIT	0B6H
+   71: 1	N	 B7	RD	BIT	0B7H
+   72: 1	N	 B8	PX0	BIT	0B8H
+   73: 1	N	 B9	PT0	BIT	0B9H
+   74: 1	N	 BA	PX1	BIT	0BAH
+   75: 1	N	 BB	PT1	BIT	0BBH
+   76: 1	N	 BC	PS	BIT	0BCH
+   77: 1	N	 BD	PT2	BIT	0BDH
+   78: 1	N	 C8	CPRL2	BIT	0C8H
+   79: 1	N	 C9	CT2	BIT	0C9H
+   80: 1	N	 CA	TR2	BIT	0CAH
+   81: 1	N	 CB	EXEN2	BIT	0CBH
+   82: 1	N	 CC	TCLK	BIT	0CCH
+   83: 1	N	 CD	RCLK	BIT	0CDH
+   84: 1	N	 CE	EXF2	BIT	0CEH
+   85: 1	N	 CF	TF2	BIT	0CFH
+   86: 1	N	 D0	P	BIT	0D0H
+   87: 1	N	 D2	OV	BIT	0D2H
+   88: 1	N	 D3	RS0	BIT	0D3H
+   89: 1	N	 D4	RS1	BIT	0D4H
+   90: 1	N	 D5	F0	BIT	0D5H
+   91: 1	N	 D6	AC	BIT	0D6H
+   92: 1	N	 D7	CY	BIT	0D7H
+   93: 1
+   94: 1	N      0000	RESET	CODE	000H
+   95: 1	N      0003	EXTI0	CODE	003H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+   96: 1	N      000B	TIMER0	CODE	00BH
+   97: 1	N      0013	EXTI1	CODE	013H
+   98: 1	N      001B	TIMER1	CODE	01BH
+   99: 1	N      0023	SINT	CODE	023H
+  100: 1	N      002B	TIMER2	CODE	02BH
+  101:				$INCLUDE(macros.asm)		; Macros
+  102: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+  103: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+  104: 1			;; MACROS
+  105: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+  106: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+  107: 1
+  108: 1			PUSH_STATE MACRO
+  109: 1					PUSH ACC
+  110: 1					PUSH PSW
+  111: 1					PUSH DPH
+  112: 1					PUSH DPL
+  113: 1					ENDM
+  114: 1
+  115: 1			POP_STATE MACRO
+  116: 1					POP DPL
+  117: 1					POP DPH
+  118: 1					POP PSW
+  119: 1					POP ACC
+  120: 1					ENDM
+  121:				$INCLUDE(labels.asm)		; Etiquetas
+  122: 1			;; ---------------------------------------------------------------------------------------
+  123: 1			;; ---------------------------------------------------------------------------------------
+  124: 1			;; ETIQUETAS
+  125: 1			;; ---------------------------------------------------------------------------------------
+  126: 1			;; ---------------------------------------------------------------------------------------
+  127: 1
+  128: 1			;; ---------------------------------------------------------------------------------------
+  129: 1			;; VARIABLES DE LA RAM
+  130: 1			;; ---------------------------------------------------------------------------------------
+  131: 1
+  132: 1			;; --------------------
+  133: 1			;; MEMORIA DE BIT
+  134: 1			;; --------------------
+  135: 1	N	 00	LCD_PEND		BIT	000H	; LCD -- GLOBAL
+  136: 1	N	 01	LCD_PEND_TIME		BIT	001H	; LCD
+  137: 1	N	 02	LCD_PEND_MENU		BIT	002H	; LCD
+  138: 1	N	 03	LCD_PEND_MOTOR		BIT	003H	; LCD
+  139: 1
+  140: 1	N	 04	MENU_PEND		BIT	004H	; MENU -- GLOBAL
+  141: 1	N	 05	MENU_PEND_UP		BIT	005H	; MENU
+  142: 1	N	 06	MENU_PEND_LEFT		BIT	006H	; MENU
+  143: 1	N	 07	MENU_PEND_RIGHT		BIT	007H	; MENU
+  144: 1	N	 08	MENU_PEND_DOWN		BIT	008H	; MENU
+  145: 1
+  146: 1	N	 09	ACCION_PEND		BIT	009H	; ACCIÓN -- GLOBAL
+  147: 1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  148: 1	N	 0C	TECLADO_PEND		BIT	000CH   ; BARRIDO DEL TECLADO
+  149: 1	N	 0D	RS232_PEND_MENU		BIT	000DH   ; RS232
+  150: 1	N	 0E	RS232_TRANS_READY	BIT	000EH	; RS232 TRANSMIT
+  151: 1	N	 0F	RS232_REC_READY		BIT	000FH   ; RS232 RECEIVED
+  152: 1
+  153: 1	N	 10	ALARMA_PEND		BIT	0010H   ; ALARM PEND
+  154: 1	N	 11	ALARMA_STATUS		BIT	0011H   ; ESTADO ALARMA
+  155: 1	N	 12	ALARMA_LUZ_01		BIT	0012H
+  156: 1	N	 13	ALARMA_LUZ_02		BIT	0013H
+  157: 1	N	 14	ALARMA_MOTOR_01		BIT	0014H
+  158: 1	N	 15	ALARMA_MOTOR_02		BIT	0015H
+  159: 1
+  160: 1	N	 16	LCD_PEND_ALARM		BIT	0016H
+  161: 1	N	 17	MENU_NODO_INICIAL	BIT	0017H
+  162: 1	N	 18	MENU_NODO_ALARMA	BIT	0018H
+  163: 1	N	 19	MENU_NODO_PERSIANA	BIT	0019H
+  164: 1	N	 1A	MENU_NODO_RELOJ		BIT	001AH
+  165: 1	N	 1B	MENU_NODO_LUZ		BIT	001BH
+  166: 1	N	 1C	LCD_PEND_INFO		BIT	001CH
+  167: 1	N	 1D	SENSORES_PEND		BIT	001DH
+  168: 1	N	 1E	MOTOR1_STATUSI		BIT	001EH
+  169: 1	N	 1F	MOTOR1_STATUSD		BIT	001FH
+  170: 1	N	 20	MOTOR2_STATUSI		BIT	0020H
+  171: 1	N	 21	MOTOR2_STATUSD		BIT	0021H
+  172: 1
+  173: 1			;; --------------------
+  174: 1			;; MEMORIA
+  175: 1			;; --------------------
+  176: 1	N	 30	CLK_HORAS		IDATA	0030H	; RELOJ
+  177: 1	N	 31	CLK_MIN			IDATA	0031H
+  178: 1	N	 32	CLK_SEG			IDATA	0032H
+  179: 1	N	 33	CLK_COUNT		IDATA	0033H
+  180: 1
+  181: 1	N	 34	MENU_NODO1		IDATA	0034H	; MENU
+  182: 1	N	 35	MENU_NODO2		IDATA	0035H
+  183: 1	N	 36	MENU_NODO3		IDATA	0036H
+  184: 1	N	 37	MENU_NODO4		IDATA	0037H
+  185: 1	N	 38	MENU_NODO5		IDATA	0038H
+  186: 1
+  187: 1	N	 39	MOTOR_ACTUAL		IDATA	0039H
+  188: 1
+  189: 1	N	 3A	TECLADO_COUNT		IDATA	003AH
+  190: 1	N	 3B	RS232_CHAR_REC		IDATA	003BH
+  191: 1	N	 3C	ALARMA_HORA		IDATA	003CH
+  192: 1	N	 3D	ALARMA_MINUTO		IDATA	003DH
+  193: 1	N	 3E	SENSORES_COUNT		IDATA	003EH
+  194: 1
+  195: 1
+  196: 1			;; -----------------------------------------------------------------------------------------------
+  197: 1			;; CONSTANTES
+  198: 1			;; -----------------------------------------------------------------------------------------------
+  199: 1	N      3CB0	TIME			EQU	15536	; 65536 - 50000
+  200: 1	N      9C40	TECLADO_TIME		EQU	40000
+  201: 1	N      000A	TECLADO_PULSADO		EQU	10
+  202: 1	N      0001	TECLADO_ESPERAR		EQU	1
+  203: 1	N      0001	SENSORES_ESPERAR	EQU	1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  204: 1	N      0006	TECLADO_REBOTES		EQU	6
+  205: 1			;; -----------------------------------------------------------------------------------------------
+  206: 1			;; PUERTOS/"PATILLAS"
+  207: 1			;; -----------------------------------------------------------------------------------------------
+  208: 1				;	SIMBOLOS
+  209: 1
+  210: 1					;; controlador de servos
+  211: 1	B	 90	MEN	BIT	P1.0
+  212: 1	B	 91	D1	BIT	P1.1
+  213: 1	B	 92	D2	BIT	P1.2
+  214: 1	B	 93	M1	BIT	P1.3
+  215: 1	B	 94	M2	BIT	P1.4
+  216: 1	B	 95	M3	BIT	P1.5
+  217: 1
+  218: 1					;; teclado
+  219: 1	B	 B4	COL1	BIT	P3.4
+  220: 1	B	 B3	COL2	BIT	P3.3
+  221: 1	B	 B2	COL3	BIT	P3.2
+  222: 1	B	 B5	FIL1	BIT	P3.5
+  223: 1	B	 B6	FIL2	BIT	P3.6
+  224: 1	B	 B7	FIL3	BIT	P3.7
+  225: 1
+  226: 1					;; luces
+  227: 1	B      0096	LUZ_01			EQU	P1.6
+  228: 1	B      0097	LUZ_02			EQU	P1.7
+  229: 1
+  230: 1					;; lcd
+  231: 1	D      00A0	DAT			EQU	P2
+  232: 1	B      00A1	RS			EQU	P2.1
+  233: 1	B      00A2	RW			EQU	P2.2
+  234: 1	B      00A3	EN			EQU	P2.3
+  235: 1	B      00A4	DB4		 	EQU 	P2.4
+  236: 1	B      00A5	DB5			EQU 	P2.5
+  237: 1	B      00A6	DB6			EQU 	P2.6
+  238: 1	B      00A7	DB7			EQU 	P2.7
+  239: 1
+  240: 1	N      0000	MENU_INICIAL		EQU	0
+  241: 1	N      0001	MENU_PERSIANA		EQU	1
+  242: 1	N      0002	MENU_LUZ		EQU	2
+  243: 1	N      0003	MENU_ALARMA		EQU	3
+  244: 1	N      0004	MENU_RELOJ		EQU	4
+  245: 1	N      0005	MENU_RS232		EQU	5
+  246: 1					;; sensores
+  247: 1	B      0082	LTOP			EQU	P0.2
+  248: 1	B      0083	LBOTTOM			EQU	P0.3
+  249: 1	B      0080	PTOP			EQU	P0.0
+  250: 1	B      0081	PBOTTOM			EQU	P0.1
+  251: 1
+  252: 1	N      004C	TESTIGO_MOTOR_1		EQU	'L'
+  253: 1	N      0050	TESTIGO_MOTOR_2		EQU	'P'
+  254: 1	N      0031	TESTIGO_LUZ_1		EQU	'1'
+  255: 1	N      0032	TESTIGO_LUZ_2		EQU	'2'
+  256: 1	N      0041	TESTIGO_ALARMA		EQU	'A'
+  257:				$INCLUDE(rtis.asm)		; Interrupciones	-->  0200H
+  258: 1			;; ----------------------------------------------------------------------------------------------
+  259: 1			;; ----------------------------------------------------------------------------------------------
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  260: 1			;; RTI´s
+  261: 1			;; ----------------------------------------------------------------------------------------------
+  262: 1			;; ----------------------------------------------------------------------------------------------
+  263: 1
+  264: 1			;; -----------------------------------------------------------------------------------------------
+  265: 1			;; SALTO A LA RTI CORRESPONDIENTE
+  266: 1			;; -----------------------------------------------------------------------------------------------
+  267: 1
+  268: 1			;ORG 0003h
+  269: 1			;LJMP RTI_EXT0
+  270: 1
+  271: 1	N      000B	ORG 000BH
+  272: 1  000B	02 02 1F	LJMP RTI_TIMER0
+  273: 1
+  274: 1			;ORG 0013h
+  275: 1			;LJMP RTI_EXT1
+  276: 1
+  277: 1			;ORG 001Bh
+  278: 1			;LJMP RTI_TIMER1
+  279: 1
+  280: 1	N      0023	org 0023H
+  281: 1  0023	02 02 00	LJMP	RTI_RS232
+  282: 1
+  283: 1
+  284: 1	N      002B	ORG 002Bh
+  285: 1  002B	02 02 48	LJMP RTI_TIMER2
+  286: 1
+  287: 1
+  288: 1
+  289: 1			;; -----------------------------------------------------------------------------------------------
+  290: 1			;; CÓDIGO DE LAS RTÌ´s
+  291: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  292: 1
+  293: 1	N      0200	ORG	200H
+  294: 1
+  295: 1			;; --------------------
+  296: 1			;; RTI_RS232
+  297: 1			;; --------------------
+  298: 1
+  299: 1  0200	C0 D0		RTI_RS232:	PUSH	PSW
+  300: 1  0202	C0 E0				PUSH	ACC
+  301: 1  0204	D2 D3				SETB	RS0
+  302: 1  0206	D2 D4				SETB	RS1
+  303: 1  0208	30 98 0B			JNB	RI,RTI_RS_WRITE
+  304: 1  020B	C2 98		RTI_RS_READ:	CLR	RI
+  305: 1  020D	E5 99				MOV	A,SBUF
+  306: 1  020F	F5 3B				MOV	RS232_CHAR_REC,A
+  307: 1  0211	D2 0F				SETB	RS232_REC_READY
+  308: 1  0213	02 02 1A			LJMP	RTI_RS_EXIT
+  309: 1
+  310: 1  0216	C2 99		RTI_RS_WRITE:	CLR	TI
+  311: 1  0218	D2 0E				SETB	RS232_TRANS_READY
+  312: 1
+  313: 1  021A	D0 E0		RTI_RS_EXIT:	POP	ACC
+  314: 1  021C	D0 D0				POP	PSW
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  315: 1  021E	32				RETI
+  316: 1
+  317: 1
+  318: 1			;; --------------------
+  319: 1			;; RTI_EXT0
+  320: 1			;; --------------------
+  321: 1
+  322: 1			;; --------------------
+  323: 1			;; RTI_TIMER0
+  324: 1			;; --------------------
+  325: 1  021F			rti_timer0:
+  326: 1  021F	C0 E0				PUSH	ACC
+  327: 1  0221	C0 D0				PUSH	PSW
+  328: 1  0223	C0 82				PUSH	DPL
+  329: 1  0225	C0 83				PUSH	DPH
+  330: 1  0227	C2 8D				CLR	TF0
+  331: 1  0229	75 8C 9C			MOV	TH0,#HIGH TECLADO_TIME
+  332: 1  022C	75 8A 40			MOV	TL0,#LOW TECLADO_TIME
+  333: 1  022F	D5 3E 05			DJNZ	SENSORES_COUNT,RTI_TIMER0_1
+  334: 1  0232	75 3E 01			MOV	SENSORES_COUNT,#SENSORES_ESPERAR
+  335: 1  0235	D2 1D				SETB	SENSORES_PEND
+  336: 1  0237			RTI_TIMER0_1:
+  337: 1  0237	D5 3A 05			DJNZ	TECLADO_COUNT,TIMER0_EXIT
+  338: 1  023A	75 3A 01			MOV	TECLADO_COUNT,#TECLADO_ESPERAR
+  339: 1  023D	D2 0C				SETB	TECLADO_PEND
+  340: 1  023F			TIMER0_EXIT:
+  341: 1  023F	D0 83				POP DPH
+  342: 1  0241	D0 82				POP DPL
+  343: 1  0243	D0 D0				POP PSW
+  344: 1  0245	D0 E0				POP ACC
+  345: 1					;POP_STATE
+  346: 1  0247	32				RETI
+  347: 1			;; --------------------
+  348: 1			;; RTI_EXT1
+  349: 1			;; --------------------
+  350: 1
+  351: 1
+  352: 1			;; --------------------
+  353: 1			;; RTI_TIMER1
+  354: 1			;; --------------------
+  355: 1
+  356: 1
+  357: 1
+  358: 1			;; --------------------
+  359: 1			;; RTI_TIMER2
+  360: 1			;; --------------------
+  361: 1  0248			RTI_TIMER2:		;PUSH_STATE
+  362: 1  0248	C0 E0					PUSH ACC
+  363: 1  024A	C0 D0					PUSH PSW
+  364: 1  024C	C0 82					PUSH DPL
+  365: 1  024E	C0 83					PUSH DPH
+  366: 1  0250	C2 CF					CLR	TF2			; Clear timer2 overflow flag
+  367: 1  0252	D5 33 03				DJNZ	CLK_COUNT,CLK_NEXT
+  368: 1  0255	12 03 21				LCALL	CLK_UPDATE
+  369: 1  0258			CLK_NEXT:
+  370: 1  0258	D0 83					POP DPH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+  371: 1  025A	D0 82					POP DPL
+  372: 1  025C	D0 D0					POP PSW
+  373: 1  025E	D0 E0					POP ACC
+  374: 1						;POP_STATE
+  375: 1  0260	32					RETI
+  376: 1
+  377: 1
+  378: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  379: 1			;; INICIALIZACIÓN DE INTERRUPCIONES
+  380: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  381: 1
+  382: 1  0261	C2 B9		INTERRUPT_INIT:		CLR IP.1			; Niveles de prioridad
+  383: 1  0263	C2 BA					CLR IP.2
+  384: 1  0265	C2 BB					CLR  IP.3
+  385: 1  0267	D2 BD					SETB IP.5
+  386: 1  0269	75 89 21				MOV	TMOD,#021H	; TIMER1 = autoreload
+  387: 1									; TIMER0 = 16BIT manual reload
+  388: 1					;; INIT DE RS232
+  389: 1  026C	75 8D F3				MOV	TH1,#243
+  390: 1  026F	75 87 80				MOV	PCON,#080H
+  391: 1  0272	75 98 50				MOV	SCON,#050H
+  392: 1  0275	D2 0D					SETB	RS232_PEND_MENU
+  393: 1  0277	D2 8E					SETB	TR1
+  394: 1  0279	D2 AC					SETB	ES
+  395: 1  027B	D2 0E					SETB	RS232_TRANS_READY
+  396: 1					;; INIT DE TECLADO Y SENSORES
+  397: 1  027D	C2 0C					CLR	TECLADO_PEND
+  398: 1  027F	C2 1D					CLR	SENSORES_PEND
+  399: 1  0281	75 3E 01				MOV	SENSORES_COUNT,#SENSORES_ESPERAR
+  400: 1  0284	75 3A 01				MOV	TECLADO_COUNT,#TECLADO_ESPERAR
+  401: 1  0287	75 8C 00				MOV	TH0,#0
+  402: 1  028A	75 8A 00				MOV	TL0,#0
+  403: 1  028D	D2 8C					SETB	TR0
+  404: 1
+  405: 1
+  406: 1  028F	C2 A8					CLR	EX0			; Interrupciones individuales
+  407: 1  0291	C2 AA					CLR	EX1
+  408: 1  0293	D2 A9					SETB	ET0
+  409: 1  0295	C2 AB					CLR	ET1
+  410: 1  0297	D2 AD					SETB	ET2
+  411: 1
+  412: 1  0299	D2 AF					SETB EA				; Permito interrupciones generales
+  413: 1  029B	22					RET
+  414:				$INCLUDE(timer.asm)		; Real timer		-->  0300H
+  415: 1			;; -----------------------------------------------------------------------------------------------
+  416: 1			;; -----------------------------------------------------------------------------------------------
+  417: 1			;;  RELOJ EN TIEMPO REAL
+  418: 1			;; -----------------------------------------------------------------------------------------------
+  419: 1			;; -----------------------------------------------------------------------------------------------
+  420: 1
+  421: 1	N      0300		ORG 300H
+  422: 1
+  423: 1			;; -----------------------------------------------------------------------------------------------
+       1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  424: 1			;; INICIALIZACIÓN DEL REAL TIMER
+  425: 1			;; -----------------------------------------------------------------------------------------------
+  426: 1
+  427: 1  0300	75 30 00	REAL_TIME_INIT:		MOV	CLK_HORAS,#0
+  428: 1  0303	75 31 00				MOV	CLK_MIN,#0
+  429: 1  0306	75 32 00				MOV	CLK_SEG,#0
+  430: 1  0309	75 33 14				MOV	CLK_COUNT,#20
+  431: 1  030C	C2 C8					CLR	CPRL2			; Autoreload con overflow
+  432: 1  030E	75 CC B0				MOV	TL2,#LOW TIME
+  433: 1  0311	75 CD 3C				MOV	TH2,#HIGH TIME
+  434: 1  0314	75 CA B0				MOV	RCAP2L,#LOW TIME
+  435: 1  0317	75 CB 3C				MOV	RCAP2H,#HIGH TIME
+  436: 1  031A	D2 CA					SETB	TR2			; Timer2 activado
+  437: 1  031C	D2 01					SETB	LCD_PEND_TIME
+  438: 1  031E	D2 00					SETB	LCD_PEND
+  439: 1  0320	22					RET
+  440: 1
+  441: 1
+  442: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  443: 1			;; ACTUALIZA EL RELOJ CADA SEGUNDO
+  444: 1			;; -----------------------------------------------------------------------------------------------
+  445: 1
+  446: 1  0321	75 33 14	CLK_UPDATE:		MOV	CLK_COUNT,#20
+  447: 1  0324	E5 32					MOV	A,CLK_SEG
+  448: 1  0326	B4 3B 16				CJNE	A,#59,CLK_INC_SEG
+  449: 1  0329	75 32 00				MOV	CLK_SEG,#0
+  450: 1  032C	E5 31					MOV	A,CLK_MIN
+  451: 1  032E	B4 3B 13				CJNE	A,#59,CLK_INC_MIN
+  452: 1  0331	75 31 00				MOV	CLK_MIN,#0
+  453: 1  0334	E5 30					MOV	A,CLK_HORAS
+  454: 1  0336	B4 17 13				CJNE	A,#23,CLK_INC_HORAS
+  455: 1  0339	75 30 00				MOV	CLK_HORAS,#0
+  456: 1  033C	02 03 51				JMP	CLK_EXIT
+  457: 1  033F	05 32		CLK_INC_SEG:		INC	CLK_SEG
+  458: 1  0341	02 03 51				JMP	CLK_EXIT
+  459: 1  0344	05 31		CLK_INC_MIN:		INC	CLK_MIN
+  460: 1  0346	12 12 0B				LCALL	ALARMA_CHECK
+  461: 1  0349	02 03 51				JMP	CLK_EXIT
+  462: 1  034C	05 30		CLK_INC_HORAS:		INC	CLK_HORAS
+  463: 1  034E	12 12 0B				LCALL	ALARMA_CHECK
+  464: 1  0351	D2 01		CLK_EXIT:		SETB	LCD_PEND_TIME
+  465: 1  0353	D2 00					SETB	LCD_PEND
+  466: 1  0355	22					RET
+  467: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  468: 1			;; INICIALIZACIÓN DEL TIMER PARA MOVER UN MOTOR
+  469: 1			;; -----------------------------------------------------------------------------------------------
+  470:				$INCLUDE(lcd.asm)		; LCD			-->  0400H
+  471: 1			;; -----------------------------------------------------------------------------------------------
+  472: 1			;; -----------------------------------------------------------------------------------------------
+  473: 1			;;  LCD. RUTINAS
+  474: 1			;; -----------------------------------------------------------------------------------------------
+  475: 1			;; -----------------------------------------------------------------------------------------------
+  476: 1
+  477: 1	N      0400		ORG 400H
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  478: 1
+  479: 1			;; -----------------------------------------------------------------------------------------------
+  480: 1			;; RUTINA QUE LEE UNA LÍNEA DE OCHO BITS EN DOS VECES, LEYENDO 4 BITS CADA VEZ (DB4-DB7)
+  481: 1			;; -----------------------------------------------------------------------------------------------
+  482: 1
+  483: 1  0400	43 A0 F0	LCD_READ_2_NIBBLES:	ORL	DAT,#0F0H		; Leemos la parte alta y la guardamos en ACC
+  484: 1  0403	D2 A3					SETB	EN
+  485: 1  0405	00					NOP				; NECESEARIO PARA QUE FUNCIONE!!!
+  486: 1  0406	E5 A0					MOV	A,DAT
+  487: 1  0408	C2 A3					CLR	EN
+  488: 1  040A	54 F0					ANL	A,#0F0h
+  489: 1  040C	C0 E0					PUSH	ACC
+  490: 1
+  491: 1  040E	D2 A3					SETB	EN			; Leemos la parte baja y la guardamos en ACC
+  492: 1  0410	E5 A0					MOV	A,DAT
+  493: 1  0412	C2 A3					CLR	EN
+  494: 1  0414	54 F0					ANL	A,#0F0h
+  495: 1  0416	C4					SWAP	A
+  496: 1  0417	FF					MOV	R7,A
+  497: 1  0418	D0 E0					POP	ACC
+  498: 1  041A	4F					ORL	A,R7
+  499: 1  041B	22					RET
+  500: 1
+  501: 1			;; -----------------------------------------------------------------------------------------------
+  502: 1			;; RUTINA QUE ESCRIBE UNA LÍNEA DE OCHO BITS EN DOS VECES, ESCRIBIENDO 4 BITS CADA VEZ (DB4-DB7)
+  503: 1			;; -----------------------------------------------------------------------------------------------
+  504: 1
+  505: 1  041C	C0 E0		LCD_WRITE_2_NIBBLES:	PUSH	ACC			;Save A for low nibble
+  506: 1  041E	43 A0 F0				ORL	DAT,#0F0h		;Bits 4..7 <- 1
+  507: 1  0421	44 0F					ORL	A,#0Fh			;Don't affect bits 0-3
+  508: 1  0423	52 A0					ANL	DAT,A			;High nibble to display
+  509: 1  0425	D2 A3					SETB	EN
+  510: 1  0427	C2 A3					CLR	EN
+  511: 1  0429	D0 E0					POP	ACC			;Prepare to send
+  512: 1  042B	C4					SWAP	A			;...second nibble
+  513: 1  042C	43 A0 F0				ORL	DAT,#0F0h		;Bits 4...7 <- 1
+  514: 1  042F	44 0F					ORL	A,#0Fh			;Don't affect bits 0...3
+  515: 1  0431	52 A0					ANL	DAT,A			;Low nibble to display
+  516: 1  0433	D2 A3					SETB	EN
+  517: 1  0435	C2 A3					CLR	EN
+  518: 1  0437	22					RET
+  519: 1
+  520: 1			;; -----------------------------------------------------------------------------------------------
+  521: 1			;; RUTINA DE ESPERA ACTIVA PARA FINALIZACION DE COMANDO
+  522: 1			;; -----------------------------------------------------------------------------------------------
+  523: 1  0438	C2 A1		LCD_WAIT:		CLR	RS			;It's a command
+  524: 1  043A	D2 A2					SETB	RW			;It's a read command
+  525: 1  043C	12 04 00				LCALL	LCD_READ_2_NIBBLES	;Take two nibbles from LCD in A
+  526: 1  043F	20 E7 F6				JB	ACC.7,LCD_WAIT		;If bit 7 high, LCD still busy
+  527: 1  0442	C2 A2					CLR	RW			;Turn off RW for future commands
+  528: 1  0444	22					RET
+  529: 1
+  530: 1
+  531: 1			;; -----------------------------------------------------------------------------------------------
+  532: 1			;; ESCRITURA DE UN CARACTER
+  533: 1			;; AVISO: El puntero se desplaza una unidad a la derecha.
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  534: 1			;; -----------------------------------------------------------------------------------------------
+  535: 1  0445	D2 A1		LCD_WRITE_TEXT:		SETB	RS
+  536: 1  0447	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  537: 1  044A	12 04 38				LCALL	LCD_WAIT
+  538: 1  044D	22					RET
+  539: 1
+  540: 1			;; -----------------------------------------------------------------------------------------------
+  541: 1			;; LIMPIAR EL LCD
+  542: 1			;; -----------------------------------------------------------------------------------------------
+  543: 1  044E	C2 A1		LCD_CLEAR:		CLR	RS
+  544: 1  0450	74 01					MOV	A,#01h
+  545: 1  0452	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES	;Write A as two separate nibbles to LCD
+  546: 1  0455	12 04 38				LCALL	LCD_WAIT
+  547: 1  0458	22					RET
+  548: 1
+  549: 1			;; -----------------------------------------------------------------------------------------------
+  550: 1			;; INICIALIZACION DEL LCD
+  551: 1			;; EL CURSOR SE DESPLAZA HACIA LA DERECHA
+  552: 1			;; -----------------------------------------------------------------------------------------------
+  553: 1  0459	C2 A3		LCD_INIT:		CLR	EN
+  554: 1
+  555: 1  045B	C2 A1					CLR	RS			; Mandamos la instrucción "0011", 1ª vez
+  556: 1  045D	C2 A2					CLR	RW
+  557: 1  045F	C2 A7					CLR	DB7
+  558: 1  0461	C2 A6					CLR	DB6
+  559: 1  0463	D2 A5					SETB	DB5
+  560: 1  0465	D2 A4					SETB	DB4
+  561: 1  0467	D2 A3					SETB	EN
+  562: 1  0469	C2 A3					CLR	EN
+  563: 1  046B	12 04 AB				LCALL	LCD_WAIT_5ms
+  564: 1
+  565: 1  046E	D2 A3					SETB	EN			; Mandamos la instrucción "0011", 2ª vez
+       1
+  566: 1  0470	C2 A3					CLR	EN
+  567: 1  0472	12 04 AB				LCALL	LCD_WAIT_5ms
+  568: 1
+  569: 1  0475	D2 A3					SETB	EN			; Mandamos la instrucción "0011", 3ª vez
+  570: 1  0477	C2 A3					CLR	EN
+  571: 1  0479	12 04 AB				LCALL	LCD_WAIT_5ms
+  572: 1
+  573: 1  047C	C2 A1					CLR	RS			; Mandamos la instrucción "0010", 4 bits mod
+       1			e
+  574: 1  047E	C2 A2					CLR	RW
+  575: 1  0480	C2 A7					CLR	DB7
+  576: 1  0482	C2 A6					CLR	DB6
+  577: 1  0484	D2 A5					SETB	DB5
+  578: 1  0486	C2 A4					CLR	DB4
+  579: 1  0488	D2 A3					SETB	EN
+  580: 1  048A	C2 A3					CLR	EN
+  581: 1  048C	12 04 AB	 			LCALL	LCD_WAIT_5ms
+  582: 1
+  583: 1  048F	74 28					MOV	A,#28h
+  584: 1  0491	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  585: 1  0494	12 04 38				LCALL	LCD_WAIT
+  586: 1
+  587: 1  0497	74 0C					MOV	A,#0Ch
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+ Line  I  Addr  Code            Source
+
+  588: 1  0499	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  589: 1  049C	12 04 38				LCALL	LCD_WAIT
+  590: 1
+  591: 1  049F	74 06					MOV	A,#06h
+  592: 1  04A1	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  593: 1  04A4	12 04 38				LCALL	LCD_WAIT
+  594: 1  04A7	12 04 4E				LCALL	LCD_CLEAR
+  595: 1  04AA	22					RET
+  596: 1
+  597: 1			;; -----------------------------------------------------------------------------------------------
+  598: 1			;; RUTINA DE ESPERA ACTIVA DE UNOS 5 ms
+  599: 1			;; -----------------------------------------------------------------------------------------------
+  600: 1  04AB	C0 E0		LCD_WAIT_5ms:		PUSH	ACC		;  Espera algo más de 256*20 us (aprox. 5ms)
+  601: 1  04AD	C0 D0					PUSH	PSW
+  602: 1  04AF	C0 F0					PUSH	B
+  603: 1  04B1	75 E0 00				MOV	ACC,#0
+  604: 1  04B4	75 F0 14				MOV	B,#20
+  605: 1  04B7	D5 E0 FD	WAIT1:			DJNZ	ACC,WAIT1
+  606: 1  04BA	D5 F0 FA				DJNZ	B,WAIT1
+  607: 1  04BD	D0 F0					POP	B
+  608: 1  04BF	D0 D0					POP	PSW
+  609: 1  04C1	D0 E0					POP	ACC
+  610: 1  04C3	22					RET
+  611: 1
+  612: 1
+  613: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  614: 1			;; REFRESCA LA HORA EN LA PANTALLA
+  615: 1			;; -----------------------------------------------------------------------------------------------
+  616: 1  04C4			LCD_REFRESH_TIME:	 ;PUSH_STATE
+  617: 1  04C4	C0 E0					PUSH	ACC
+  618: 1  04C6	C0 D0					PUSH	PSW
+  619: 1  04C8	C0 83					PUSH	DPH
+  620: 1  04CA	C0 82					PUSH	DPL
+  621: 1  04CC	C2 D3					CLR	RS0
+  622: 1  04CE	D2 D4					SETB	RS1
+  623: 1
+  624: 1  04D0	74 CC					MOV	A,#0CCH	;; COLOCAMOS EL PUNTERO EN LA SEGUNDA LINEA, PARA EL CLK
+       1
+  625: 1  04D2	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  626: 1  04D5	12 04 38				LCALL	LCD_WAIT
+  627: 1
+  628: 1  04D8	E5 30					MOV	A,CLK_HORAS
+  629: 1  04DA	12 04 FC				LCALL	TIME_CONV
+  630: 1
+  631: 1  04DD	74 3A					MOV	A,#':'
+  632: 1  04DF	12 04 45				LCALL	LCD_WRITE_TEXT
+  633: 1
+  634: 1  04E2	E5 31					MOV	A,CLK_MIN
+  635: 1  04E4	12 04 FC				LCALL	TIME_CONV
+  636: 1
+  637: 1  04E7	74 3A					MOV	A,#':'
+  638: 1  04E9	12 04 45				LCALL	LCD_WRITE_TEXT
+  639: 1
+  640: 1  04EC	E5 32					MOV	A,CLK_SEG
+  641: 1  04EE	12 04 FC				LCALL	TIME_CONV
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+ Line  I  Addr  Code            Source
+
+  642: 1
+  643: 1  04F1	D0 82					POP	DPL
+  644: 1  04F3	D0 83					POP	DPH
+  645: 1  04F5	D0 D0					POP	PSW
+  646: 1  04F7	D0 E0					POP	ACC
+  647: 1						; POP_STATE
+  648: 1  04F9	C2 01					CLR	LCD_PEND_TIME
+  649: 1  04FB	22					RET
+  650: 1
+  651: 1
+  652: 1  04FC	75 F0 0A	TIME_CONV:		MOV	B,#10
+  653: 1  04FF	84					DIV	AB
+  654: 1  0500	24 30					ADD	A,#'0'
+  655: 1  0502	12 04 45				LCALL	LCD_WRITE_TEXT
+  656: 1  0505	74 00					MOV	A,#0
+  657: 1  0507	25 F0					ADD	A,B
+  658: 1  0509	24 30					ADD	A,#'0'
+  659: 1  050B	12 04 45				LCALL	LCD_WRITE_TEXT
+  660: 1  050E	22					RET
+  661: 1
+  662: 1
+  663: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  664: 1			;; REFRESCA LA POSICIÓN ACTUAL DEL MENU EN LA PANTALLA
+  665: 1			;; UTILIZA EL BANCO DE REGISTROS 01
+  666: 1			;; -----------------------------------------------------------------------------------------------
+  667: 1  050F			LCD_REFRESH_MENU:	; PUSH_STATE
+  668: 1  050F	C0 E0					PUSH	ACC
+  669: 1  0511	C0 D0					PUSH	PSW
+  670: 1  0513	C0 83					PUSH	DPH
+  671: 1  0515	C0 82					PUSH	DPL
+  672: 1
+  673: 1
+  674: 1  0517	D2 D3					SETB	RS0
+  675: 1  0519	C2 D4					CLR	RS1
+  676: 1
+  677: 1  051B	74 80					MOV	A,#80H		;; COLOCAMOS EL PUNTERO EN LA PRIMERA LINEA, PRIMER
+       1			CARACTER
+  678: 1  051D	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  679: 1  0520	12 04 38				LCALL	LCD_WAIT
+  680: 1
+  681: 1  0523	12 08 14				LCALL	MENU_MOV_VALIDO
+  682: 1  0526	78 05					MOV	R0,#5
+  683: 1  0528	A3		REFRESH_MENU_INC:	INC	DPTR
+  684: 1  0529	D8 FD					DJNZ	R0,REFRESH_MENU_INC
+  685: 1  052B	79 14					MOV	R1,#20
+  686: 1  052D	74 00		REFRESH_MENU_BUC:	MOV	A,#0
+  687: 1  052F	93					MOVC	A,@A+DPTR
+  688: 1  0530	12 04 45				LCALL	LCD_WRITE_TEXT
+  689: 1  0533	A3					INC	DPTR
+  690: 1  0534	D9 F7					DJNZ	R1,REFRESH_MENU_BUC
+  691: 1  0536	C2 02					CLR	LCD_PEND_MENU
+  692: 1
+  693: 1
+  694: 1  0538	D0 82					POP	DPL
+  695: 1  053A	D0 83					POP	DPH
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+ Line  I  Addr  Code            Source
+
+  696: 1  053C	D0 D0					POP	PSW
+  697: 1  053E	D0 E0					POP	ACC
+  698: 1						; POP_STATE
+  699: 1  0540	22					RET
+  700: 1
+  701: 1  0541	C0 E0		LCD_REFRESH_ALARM:	PUSH	ACC
+  702: 1
+  703: 1
+  704: 1  0543	74 C0					MOV	A,#0C0H
+  705: 1  0545	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  706: 1  0548	12 04 38				LCALL	LCD_WAIT
+  707: 1
+  708: 1  054B	E5 3C					MOV	A,ALARMA_HORA
+  709: 1  054D	12 04 FC				LCALL	TIME_CONV
+  710: 1  0550	74 3A					MOV	A,#':'
+  711: 1  0552	12 04 45				LCALL	LCD_WRITE_TEXT
+  712: 1
+  713: 1  0555	E5 3D					MOV	A,ALARMA_MINUTO
+  714: 1  0557	12 04 FC				LCALL	TIME_CONV
+  715: 1
+  716: 1  055A	74 C6					MOV	A,#0C6H
+  717: 1  055C	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  718: 1  055F	12 04 38				LCALL	LCD_WAIT
+  719: 1
+  720: 1  0562	30 14 08	LCD_RA_01:		JNB	ALARMA_MOTOR_01,LCD_RA_01_OFF
+  721: 1  0565	74 4C					MOV	A,#'L'
+  722: 1  0567	12 04 45				LCALL	LCD_WRITE_TEXT
+  723: 1
+  724: 1  056A	02 05 72				LJMP	LCD_RA_02
+  725: 1  056D	74 20		LCD_RA_01_OFF:		MOV	A,#' '
+  726: 1  056F	12 04 45				LCALL	LCD_WRITE_TEXT
+  727: 1  0572	30 15 08	LCD_RA_02:		JNB	ALARMA_MOTOR_02,LCD_RA_02_OFF
+  728: 1  0575	74 50					MOV	A,#'P'
+  729: 1  0577	12 04 45				LCALL	LCD_WRITE_TEXT
+  730: 1  057A	02 05 82				LJMP	LCD_RA_03
+  731: 1  057D	74 20		LCD_RA_02_OFF:		MOV	A,#' '
+  732: 1  057F	12 04 45				LCALL	LCD_WRITE_TEXT
+  733: 1  0582	30 12 08	LCD_RA_03:		JNB	ALARMA_LUZ_01,LCD_RA_03_OFF
+  734: 1  0585	74 31					MOV	A,#'1'
+  735: 1  0587	12 04 45				LCALL	LCD_WRITE_TEXT
+  736: 1  058A	02 05 92				LJMP	LCD_RA_04
+  737: 1  058D	74 20		LCD_RA_03_OFF:		MOV	A,#' '
+  738: 1  058F	12 04 45				LCALL	LCD_WRITE_TEXT
+  739: 1  0592	30 13 08	LCD_RA_04:		JNB	ALARMA_LUZ_02,LCD_RA_04_OFF
+  740: 1  0595	74 32					MOV	A,#'2'
+  741: 1  0597	12 04 45				LCALL	LCD_WRITE_TEXT
+  742: 1  059A	02 05 A2				LJMP	LCD_RA_05
+  743: 1  059D	74 20		LCD_RA_04_OFF:		MOV	A,#' '
+  744: 1  059F	12 04 45				LCALL	LCD_WRITE_TEXT
+  745: 1  05A2	74 20		LCD_RA_05:		MOV	A,#' '
+  746: 1  05A4	12 04 45				LCALL	LCD_WRITE_TEXT
+  747: 1  05A7	30 11 05				JNB	ALARMA_STATUS,LCD_RA_OFF
+  748: 1  05AA	74 41		LCD_RA_ON:		MOV	A,#'A'
+  749: 1  05AC	02 05 B1				LJMP	LCD_RA_EXIT
+  750: 1  05AF	74 20		LCD_RA_OFF:		MOV	A,#' '
+  751: 1  05B1	12 04 45	LCD_RA_EXIT:		LCALL	LCD_WRITE_TEXT
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
+
+
+
+ Line  I  Addr  Code            Source
+
+  752: 1  05B4	C2 16					CLR	LCD_PEND_ALARM
+  753: 1  05B6	D0 E0					POP	ACC
+  754: 1  05B8	22					RET
+  755: 1
+  756: 1  05B9	74 C0		LCD_BORRAR_INFO:	MOV	A,#0C0H
+  757: 1  05BB	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  758: 1  05BE	12 04 38				LCALL	LCD_WAIT
+  759: 1  05C1	7C 0A					MOV	R4,#10
+  760: 1  05C3	74 20					MOV	A,#' '
+  761: 1  05C5	12 04 45				LCALL	LCD_WRITE_TEXT
+  762: 1  05C8	DC F9					DJNZ	R4,$-5
+  763: 1  05CA	22					RET
+  764: 1
+  765: 1  05CB	74 C8		LCD_REFRESH_STATUS:	MOV	A,#0C8H
+  766: 1  05CD	12 04 1C				LCALL	LCD_WRITE_2_NIBBLES
+  767: 1  05D0	12 04 38				LCALL	LCD_WAIT
+  768: 1  05D3	30 96 08				JNB	LUZ_01,LCD_RS_01_OFF
+  769: 1  05D6	74 31					MOV	A,#'1'
+  770: 1  05D8	12 04 45				LCALL	LCD_WRITE_TEXT
+  771: 1  05DB	02 05 E3				LJMP	LCD_RS_02
+  772: 1  05DE	74 20		LCD_RS_01_OFF:		MOV	A,#' '
+  773: 1  05E0	12 04 45				LCALL	LCD_WRITE_TEXT
+  774: 1  05E3	30 97 08	LCD_RS_02:		JNB	LUZ_02,LCD_RS_02_OFF
+  775: 1  05E6	74 32					MOV	A,#'2'
+  776: 1  05E8	12 04 45				LCALL	LCD_WRITE_TEXT
+  777: 1  05EB	02 05 F3				LJMP	LCD_RS_03
+  778: 1  05EE	74 20		LCD_RS_02_OFF:		MOV	A,#' '
+  779: 1  05F0	12 04 45				LCALL	LCD_WRITE_TEXT
+  780: 1  05F3	22		LCD_RS_03:		RET
+  781: 1
+  782: 1
+  783: 1
+  784: 1  05F4	12 05 B9	LCD_REFRESH_INICIAL:	LCALL	LCD_BORRAR_INFO
+  785: 1  05F7	12 05 CB				LCALL	LCD_REFRESH_STATUS
+  786: 1  05FA	22					RET
+  787: 1  05FB	12 05 B9	LCD_REFRESH_PERSIANA:	LCALL	LCD_BORRAR_INFO
+  788: 1  05FE	12 05 CB				LCALL	LCD_REFRESH_STATUS
+  789: 1  0601	22					RET
+  790: 1  0602	12 05 B9	LCD_REFRESH_RELOJ:	LCALL	LCD_BORRAR_INFO
+  791: 1  0605	12 05 CB				LCALL	LCD_REFRESH_STATUS
+  792: 1  0608	22					RET
+  793: 1  0609	12 05 B9	LCD_REFRESH_LUZ:	LCALL	LCD_BORRAR_INFO
+  794: 1  060C	12 05 CB				LCALL	LCD_REFRESH_STATUS
+  795: 1  060F	22					RET
+  796: 1  0610			LCD_REFRESH_INFO:
+  797: 1  0610	30 17 03				JNB	MENU_NODO_INICIAL,BG_RI1
+  798: 1  0613	12 05 F4				LCALL	LCD_REFRESH_INICIAL
+  799: 1  0616	30 18 03	BG_RI1:			JNB	MENU_NODO_ALARMA,BG_RI2
+  800: 1  0619	12 05 41				LCALL	LCD_REFRESH_ALARM
+  801: 1  061C	30 1B 03	BG_RI2:			JNB	MENU_NODO_LUZ,BG_RI3
+  802: 1  061F	12 06 09				LCALL	LCD_REFRESH_LUZ
+  803: 1  0622	30 19 03	BG_RI3:			JNB	MENU_NODO_PERSIANA,BG_RI4
+  804: 1  0625	12 05 FB				LCALL	LCD_REFRESH_PERSIANA
+  805: 1  0628	30 1A 03	BG_RI4:			JNB	MENU_NODO_RELOJ,BG_RI5
+  806: 1  062B	12 06 02				LCALL	LCD_REFRESH_RELOJ
+  807: 1  062E	C2 1C		BG_RI5:			CLR	LCD_PEND_INFO
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 16
+
+
+
+ Line  I  Addr  Code            Source
+
+  808: 1  0630	22					RET
+  809: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  810: 1			;; REFRESCA LA PANTALLA ENTERA
+  811: 1			;; -----------------------------------------------------------------------------------------------
+  812: 1  0631	C2 00		LCD_UPDATE:		CLR	LCD_PEND
+  813: 1  0633	30 01 03				JNB	LCD_PEND_TIME, BG_RE1
+  814: 1  0636	12 04 C4				LCALL	LCD_REFRESH_TIME
+  815: 1  0639	30 02 03	BG_RE1:			JNB	LCD_PEND_MENU, BG_RE2
+  816: 1  063C	12 05 0F				LCALL	LCD_REFRESH_MENU
+  817: 1  063F	30 1C 03	BG_RE2:			JNB	LCD_PEND_INFO,BG_RE_EXIT
+  818: 1  0642	12 06 10				LCALL	LCD_REFRESH_INFO
+  819: 1
+  820: 1  0645	22		BG_RE_EXIT:		RET
+  821:				$INCLUDE(menu.asm)		; Menú			-->  0700H
+  822: 1			;; ----------------------------------------------------------------------------------------------
+  823: 1			;; ----------------------------------------------------------------------------------------------
+  824: 1			;; MENU DE INTERFAZ DE USUARIO
+  825: 1			;; ----------------------------------------------------------------------------------------------
+  826: 1			;; ----------------------------------------------------------------------------------------------
+  827: 1
+  828: 1	N      0700		ORG 0700H
+  829: 1
+  830: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  831: 1			;; INICIALIZACIÓN DEL MENÚ
+  832: 1			;; -----------------------------------------------------------------------------------------------
+  833: 1  0700	75 34 00	MENU_INIT:			MOV	MENU_NODO1,#000H
+  834: 1  0703	75 35 00					MOV	MENU_NODO2,#000H
+  835: 1  0706	75 36 00					MOV	MENU_NODO3,#000H
+  836: 1  0709	75 37 00					MOV	MENU_NODO4,#000H
+  837: 1  070C	75 38 00					MOV	MENU_NODO5,#000H
+  838: 1  070F	D2 02		 				SETB	LCD_PEND_MENU
+  839: 1  0711	D2 1C						SETB	LCD_PEND_INFO
+  840: 1  0713	D2 00						SETB	LCD_PEND
+  841: 1  0715	22						RET
+  842: 1
+  843: 1
+  844: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  845: 1			;; ACTUALIZACIÓN DEL MENÚ
+  846: 1			;; -----------------------------------------------------------------------------------------------
+  847: 1  0716	12 07 1A	MENU_UPDATE:			LCALL MENU_REALIZAR_MOV
+  848: 1
+  849: 1  0719	22						RET
+  850: 1
+  851: 1
+  852: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  853: 1			;; REALIZACIÓN DE UN MOVIMIENTO DEL MENÚ
+  854: 1			;; Aviso: No comprueba si el movimiento que realiza es válido
+  855: 1			;;	  Utiliza el banco de registros 10
+  856: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  857: 1  071A			MENU_REALIZAR_MOV:		;  PUSH_STATE
+  858: 1  071A	C0 E0						PUSH ACC
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 17
+
+
+
+ Line  I  Addr  Code            Source
+
+  859: 1  071C	C0 D0						PUSH PSW
+  860: 1  071E	C0 83						PUSH DPH
+  861: 1  0720	C0 82						PUSH DPL
+  862: 1  0722	D2 D3						SETB	RS0
+  863: 1  0724	C2 D4						CLR	RS1
+  864: 1  0726	20 06 0C					JB	MENU_PEND_LEFT,MENU_MOV_LEFT
+  865: 1  0729	20 05 25					JB	MENU_PEND_UP,MENU_MOV_UP
+  866: 1  072C	20 07 45					JB	MENU_PEND_RIGHT,MENU_MOV_RIGHT
+  867: 1  072F	20 08 61					JB	MENU_PEND_DOWN,MENU_MOV_DOWN
+  868: 1  0732	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  869: 1
+  870: 1			;; -------------------------------------------
+  871: 1			;; MOVIMIENTO PENDIENTE HACIA LA IZQUIERDA
+  872: 1			;; -------------------------------------------
+  873: 1  0735	C2 06		MENU_MOV_LEFT:			CLR	MENU_PEND_LEFT
+  874: 1  0737	79 38						MOV	R1,#MENU_NODO5
+  875: 1  0739	E7		MENU_MOV_LEFT_BUC:		MOV	A, @R1
+  876: 1  073A	FA						MOV	R2, A
+  877: 1  073B	BA 00 0E					CJNE	R2,#0,MENU_MOV_LEFT_END
+  878: 1  073E	19						DEC	R1
+  879: 1  073F	B9 34 F7					CJNE	R1,#MENU_NODO1,MENU_MOV_LEFT_BUC
+  880: 1  0742	E7						MOV	A, @R1
+  881: 1  0743	FA						MOV	R2, A
+  882: 1  0744	BA 00 05					CJNE	R2,#0,MENU_MOV_LEFT_END
+  883: 1  0747	77 01						MOV	@R1,#1				;; Si estamos en raíz, vamos
+       1			 a 1.0.0.0.0
+  884: 1  0749	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  885: 1  074C	77 00		MENU_MOV_LEFT_END:		MOV	@R1,#0
+  886: 1  074E	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  887: 1
+  888: 1			;; -------------------------------------------
+  889: 1			;; MOVIMIENTO PENDIENTE HACIA ARRIBA
+  890: 1			;; -------------------------------------------
+  891: 1  0751	C2 05		MENU_MOV_UP:			CLR	MENU_PEND_UP
+  892: 1  0753	79 38						MOV	R1,#MENU_NODO5
+  893: 1  0755	E7		MENU_MOV_UP_BUC:		MOV	A, @R1
+  894: 1  0756	FA						MOV	R2, A
+  895: 1  0757	BA 00 0E					CJNE	R2,#0,MENU_MOV_UP_ST1
+  896: 1  075A	19						DEC	R1
+  897: 1  075B	B9 34 F7					CJNE	R1,#MENU_NODO1,MENU_MOV_UP_BUC
+  898: 1  075E	E7						MOV	A, @R1
+  899: 1  075F	FA						MOV	R2, A
+  900: 1  0760	BA 00 05					CJNE	R2,#0,MENU_MOV_UP_ST1
+  901: 1  0763	77 01						MOV	@R1,#1				;; Si estamos en raíz, vamos
+       1			 a 1.0.0.0.0
+  902: 1  0765	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+       1
+  903: 1  0768	BA 01 03	MENU_MOV_UP_ST1:		CJNE	R2,#1,MENU_MOV_UP_ST2
+  904: 1  076B	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  905: 1  076E	E7		MENU_MOV_UP_ST2:		MOV	A,@R1
+  906: 1  076F	14						DEC	A
+  907: 1  0770	F7						MOV	@R1,A
+  908: 1  0771	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  909: 1
+  910: 1
+  911: 1			;; -------------------------------------------
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 18
+
+
+
+ Line  I  Addr  Code            Source
+
+  912: 1			;; MOVIMIENTO PENDIENTE HACIA LA DERECHA
+  913: 1			;; -------------------------------------------
+  914: 1  0774	C2 07		MENU_MOV_RIGHT:			CLR	MENU_PEND_RIGHT
+  915: 1  0776	79 34						MOV	R1,#MENU_NODO1
+  916: 1  0778	E7		MENU_MOV_RIGHT_BUC:		MOV	A, @R1
+  917: 1  0779	FA						MOV	R2, A
+  918: 1  077A	BA 00 03					CJNE	R2,#0,MENU_MOV_RIGHT_ST1
+  919: 1  077D	02 07 8E					LJMP	MENU_MOV_RIGHT_END
+  920: 1  0780	09		MENU_MOV_RIGHT_ST1:		INC	R1
+  921: 1  0781	B9 38 F4					CJNE	R1,#MENU_NODO5,MENU_MOV_RIGHT_BUC
+  922: 1  0784	E7						MOV	A, @R1
+  923: 1  0785	FA						MOV	R2, A
+  924: 1  0786	BA 00 27					CJNE	R2,#0,MENU_REALIZAR_MOV_EXIT
+  925: 1  0789	77 01						MOV	@R1,#1
+  926: 1  078B	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  927: 1  078E	77 01		MENU_MOV_RIGHT_END:		MOV	@R1,#1
+  928: 1  0790	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  929: 1
+  930: 1
+  931: 1			;; -------------------------------------------
+  932: 1			;; MOVIMIENTO PENDIENTE HACIA ABAJO
+  933: 1			;; -------------------------------------------
+  934: 1  0793	C2 08		MENU_MOV_DOWN:			CLR	MENU_PEND_DOWN
+  935: 1  0795	79 38						MOV	R1,#MENU_NODO5
+  936: 1  0797	E7		MENU_MOV_DOWN_BUC:		MOV	A, @R1
+  937: 1  0798	FA						MOV	R2, A
+  938: 1  0799	BA 00 0E					CJNE	R2,#0,MENU_MOV_DOWN_ST1
+  939: 1  079C	19						DEC	R1
+  940: 1  079D	B9 34 F7					CJNE	R1,#MENU_NODO1,MENU_MOV_DOWN_BUC
+  941: 1  07A0	E7						MOV	A, @R1
+  942: 1  07A1	FA						MOV	R2, A
+  943: 1  07A2	BA 00 05					CJNE	R2,#0,MENU_MOV_DOWN_ST1
+  944: 1  07A5	77 01						MOV	@R1,#1				;; Si estamos en raíz, vamos
+       1			 a 1.0.0.0.0
+  945: 1  07A7	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  946: 1  07AA	E7		MENU_MOV_DOWN_ST1:		MOV	A,@R1
+  947: 1  07AB	04						INC	A
+  948: 1  07AC	F7						MOV	@R1,A
+  949: 1  07AD	02 07 B0					LJMP	MENU_REALIZAR_MOV_EXIT
+  950: 1
+  951: 1
+  952: 1			;; -------------------------------------------
+  953: 1			;; MENU_REALIZAR_MOV_EXIT
+  954: 1			;; -------------------------------------------
+  955: 1
+  956: 1  07B0			MENU_REALIZAR_MOV_EXIT:
+  957: 1  07B0	02 07 BC					LJMP	MENU_COMPROBAR_MOV
+  958: 1  07B3			MENU_REALIZAR_MOV_EXIT_ST1:
+  959: 1  07B3	D0 82						POP DPL
+  960: 1  07B5	D0 83						POP DPH
+  961: 1  07B7	D0 D0						POP PSW
+  962: 1  07B9	D0 E0						POP ACC
+  963: 1
+  964: 1							; POP_STATE
+  965: 1  07BB	22						RET
+  966: 1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 19
+
+
+
+ Line  I  Addr  Code            Source
+
+  967: 1
+  968: 1			;; -----------------------------------------------------------------------------------------------
+       1
+  969: 1			;; VERIFICACIÓN DEL MOVIMIENTO DEL MENÚ
+  970: 1			;; Aviso: Utiliza MENU_MOV_VALIDO y el banco de registros
+  971: 1			;; -----------------------------------------------------------------------------------------------
+  972: 1
+  973: 1  07BC	12 08 14	MENU_COMPROBAR_MOV:		LCALL	MENU_MOV_VALIDO
+  974: 1  07BF	B8 01 12					CJNE	R0,#1,MENU_MOV_NO_VALIDO
+  975: 1  07C2	E9						MOV	A,R1
+  976: 1  07C3	B4 34 05					CJNE	A,#MENU_NODO1,MENU_C_M_01
+  977: 1  07C6	12 07 DB					LCALL	MENU_NODO_CHECK
+  978: 1  07C9	D2 1C						SETB	LCD_PEND_INFO
+  979: 1  07CB	D2 02		MENU_C_M_01:			SETB	LCD_PEND_MENU
+  980: 1  07CD	D2 00						SETB	LCD_PEND
+  981: 1  07CF	D2 0D						SETB	RS232_PEND_MENU
+  982: 1  07D1	02 07 D6					LJMP	MENU_COMPROBAR_MOV_EXIT
+  983: 1  07D4	EA		MENU_MOV_NO_VALIDO:		MOV	A,R2
+  984: 1  07D5	F7						MOV	@R1,A
+  985: 1  07D6	C2 04		MENU_COMPROBAR_MOV_EXIT:	CLR	MENU_PEND
+  986: 1
+  987: 1							; POP_STATE
+  988: 1
+  989: 1  07D8	02 07 B3					LJMP	MENU_REALIZAR_MOV_EXIT_ST1
+  990: 1
+  991: 1
+  992: 1			;; ------------------------------------
+  993: 1			;; MENU NODO CHECK
+  994: 1			;; ------------------------------------
+  995: 1  07DB	C0 E0		MENU_NODO_CHECK:	PUSH	ACC
+  996: 1  07DD	C2 17					CLR	MENU_NODO_INICIAL
+  997: 1  07DF	C2 1B					CLR	MENU_NODO_LUZ
+  998: 1  07E1	C2 19					CLR	MENU_NODO_PERSIANA
+  999: 1  07E3	C2 18					CLR	MENU_NODO_ALARMA
+ 1000: 1  07E5	C2 1A					CLR	MENU_NODO_RELOJ
+ 1001: 1  07E7	E5 34					MOV	A,MENU_NODO1
+ 1002: 1  07E9	B4 00 05				CJNE	A,#MENU_INICIAL,MENU_CHECK_ST1
+ 1003: 1  07EC	D2 17					SETB	MENU_NODO_INICIAL
+ 1004: 1  07EE	02 08 11				LJMP	MENU_CHECK_EXIT
+ 1005: 1  07F1	B4 01 05	MENU_CHECK_ST1:		CJNE	A,#MENU_PERSIANA,MENU_CHECK_ST2
+ 1006: 1  07F4	D2 19					SETB	MENU_NODO_PERSIANA
+ 1007: 1  07F6	02 08 11				LJMP	MENU_CHECK_EXIT
+ 1008: 1  07F9	B4 02 05	MENU_CHECK_ST2:		CJNE	A,#MENU_LUZ,MENU_CHECK_ST3
+ 1009: 1  07FC	D2 1B					SETB	MENU_NODO_LUZ
+ 1010: 1  07FE	02 08 11				LJMP	MENU_CHECK_EXIT
+ 1011: 1  0801	B4 03 05	MENU_CHECK_ST3:		CJNE	A,#MENU_ALARMA,MENU_CHECK_ST4
+ 1012: 1  0804	D2 18					SETB	MENU_NODO_ALARMA
+ 1013: 1  0806	02 08 11				LJMP	MENU_CHECK_EXIT
+ 1014: 1  0809	B4 04 05	MENU_CHECK_ST4:		CJNE	A,#MENU_RELOJ,MENU_CHECK_EXIT
+ 1015: 1  080C	D2 1A					SETB	MENU_NODO_RELOJ
+ 1016: 1  080E	02 08 11				LJMP	MENU_CHECK_EXIT
+ 1017: 1
+ 1018: 1  0811	D0 E0		MENU_CHECK_EXIT:	POP	ACC
+ 1019: 1  0813	22					RET
+ 1020: 1
+ 1021: 1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 20
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1022: 1			;; ------------------------------------------------------------------------
+ 1023: 1			;; RUTINA que comprueba si el movimiento es válido con los nodos actuales.
+ 1024: 1			;; Si existe,	 R0=1 ,DPTR = DIR (en R0 del banco 11)
+ 1025: 1			;; Si no existe, R0=0		  (en R0 del banco 11)
+ 1026: 1			;; ------------------------------------------------------------------------
+ 1027: 1  0814			MENU_MOV_VALIDO:		;  PUSH_STATE
+ 1028: 1  0814	C0 E0						PUSH ACC
+ 1029: 1  0816	C0 D0						PUSH PSW
+ 1030: 1
+ 1031: 1  0818	D2 D4						SETB	RS1
+ 1032: 1  081A	D2 D3						SETB	RS0
+ 1033: 1
+ 1034: 1  081C	90 17 00					MOV	DPTR,#MENU_ELEMENTS
+ 1035: 1  081F	74 00						MOV	A,#0
+ 1036: 1  0821	93						MOVC	A,@A+DPTR
+ 1037: 1  0822	FC						MOV	R4,A			; R4 = NUMERO DE ELEMENTOS EN EL MEN
+       1			U
+ 1038: 1  0823	A3						INC	DPTR
+ 1039: 1  0824	79 34		MENU_MOV_VALIDO_BUC:		MOV	R1,#MENU_NODO1		; PUNTERO AL NODO-i
+ 1040: 1  0826	7A 00						MOV	R2,#0			; R2 = CONTADOR DE NODOS
+ 1041: 1  0828	EA		MENU_MOV_VALIDO_ST1:		MOV	A,R2
+ 1042: 1  0829	93						MOVC	A,@A+DPTR
+ 1043: 1  082A	C2 D2						CLR	OV
+ 1044: 1  082C	C3						CLR	C
+ 1045: 1  082D	97						SUBB	A,@R1
+ 1046: 1  082E	70 11						JNZ	MENU_VL_NEXT_ENTRY	; COMPROBAMOS SI LA ENTRADA Y NODOI
+       1			SON IGUALES
+ 1047: 1  0830	B9 38 03					CJNE	R1,#MENU_NODO5,MENU_VL_SIG
+ 1048: 1  0833	02 08 3B					LJMP	MENU_VL_ESVALIDO
+ 1049: 1  0836	0A		MENU_VL_SIG:			INC	R2
+ 1050: 1  0837	09						INC	R1
+ 1051: 1  0838	02 08 28					LJMP	MENU_MOV_VALIDO_ST1
+ 1052: 1  083B	02 08 4F	MENU_VL_ESVALIDO:		LJMP	MENU_VL_EXIT_ESVAL 	;; EL ELEMENTO EXISTE Y ES VALIDO
+ 1053: 1
+ 1054: 1  083E	02 08 48					LJMP	MENU_VL_EXIT
+ 1055: 1  0841	7D 1B		MENU_VL_NEXT_ENTRY:		MOV	R5,#27	;; EL ELEMENTO DEL MENU NO EXISTE. INCREMENTAR DPTR
+       1			EN +23
+ 1056: 1  0843	A3		MENU_VL_INC_27:			INC	DPTR
+ 1057: 1  0844	DD FD						DJNZ	R5,MENU_VL_INC_27
+ 1058: 1  0846	DC DC						DJNZ	R4,MENU_MOV_VALIDO_BUC	;; HEMOS TERMINADO DE RECORRER TODAS
+       1			 LAS ENTRADAS DEL MENU
+ 1059: 1
+ 1060: 1  0848			MENU_VL_EXIT:			;  POP_STATE
+ 1061: 1
+ 1062: 1  0848	D0 D0						POP PSW
+ 1063: 1  084A	D0 E0						POP ACC
+ 1064: 1  084C	78 00						MOV	R0,#0			;; POR LO TANTO LA ENTRADA NO ES VAL
+       1			IDA.
+ 1065: 1  084E	22						RET
+ 1066: 1  084F			MENU_VL_EXIT_ESVAL:
+ 1067: 1  084F	D0 D0						POP PSW
+ 1068: 1  0851	D0 E0						POP ACC
+ 1069: 1  0853	78 01						MOV	R0,#1			;; POR LO TANTO LA ENTRADA NO ES VAL
+       1			IDA.
+ 1070: 1  0855	22						RET
+ 1071: 1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 21
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1072: 1
+ 1073: 1
+ 1074: 1
+ 1075: 1
+ 1076:				$INCLUDE(acciones.asm)		; Acciones		-->  0900H
+ 1077: 1			;; -----------------------------------------------------------------------------------------------
+ 1078: 1			;; -----------------------------------------------------------------------------------------------
+ 1079: 1			;; ACCIONES
+ 1080: 1			;; -----------------------------------------------------------------------------------------------
+ 1081: 1			;; -----------------------------------------------------------------------------------------------
+ 1082: 1
+ 1083: 1	N      0900		ORG 0900H
+ 1084: 1
+ 1085: 1			;; -----------------------------------------------------------------------------------------------
+ 1086: 1			;; RUTINA QUE EJECUTA LA ACCIÓN ASOCIADA A LA POSICIÓN ACTUAL DEL MENU (SI EXISTE)
+ 1087: 1			;; UTILIZA EL BANCO DE REGISTROS 01
+ 1088: 1			;; -----------------------------------------------------------------------------------------------
+ 1089: 1
+ 1090: 1  0900			ACCION_UPDATE:		; PUSH_STATE
+ 1091: 1  0900	C0 E0					PUSH ACC
+ 1092: 1  0902	C0 D0					PUSH PSW
+ 1093: 1  0904	C0 83					PUSH DPH
+ 1094: 1  0906	C0 82					PUSH DPL
+ 1095: 1
+ 1096: 1  0908	D2 D3					SETB	RS0
+ 1097: 1  090A	C2 D4					CLR	RS1
+ 1098: 1  090C	C2 09					CLR	ACCION_PEND
+ 1099: 1  090E	12 08 14				LCALL	MENU_MOV_VALIDO
+ 1100: 1  0911	79 19					MOV	R1,#25
+ 1101: 1
+ 1102: 1  0913	A3		ACCION_UPDATE_INC:	INC	DPTR
+ 1103: 1  0914	D9 FD					DJNZ	R1,ACCION_UPDATE_INC
+ 1104: 1  0916	74 00					MOV	A,#0
+ 1105: 1  0918	93					MOVC	A,@A+DPTR
+ 1106: 1  0919	F9					MOV	R1,A
+ 1107: 1  091A	A3					INC	DPTR
+ 1108: 1  091B	74 00					MOV	A,#0
+ 1109: 1  091D	93					MOVC	A,@A+DPTR
+ 1110: 1  091E	FA					MOV	R2,A
+ 1111: 1  091F	B9 00 06				CJNE	R1,#0,ACCION_UPDATE_SALTO
+ 1112: 1  0922	BA 00 03				CJNE	R2,#0,ACCION_UPDATE_SALTO
+ 1113: 1  0925	02 09 2F				JMP	ACCION_UPDATE_EXIT
+ 1114: 1
+ 1115: 1  0928	89 83		ACCION_UPDATE_SALTO:	MOV	DPH,R1
+ 1116: 1  092A	8A 82					MOV	DPL,R2
+ 1117: 1  092C	74 00					MOV	A,#0
+ 1118: 1  092E	73					JMP	@A+DPTR
+ 1119: 1
+ 1120: 1  092F	D2 0D		ACCION_UPDATE_EXIT:	SETB	RS232_PEND_MENU
+ 1121: 1  0931	D2 1C					SETB	LCD_PEND_INFO
+ 1122: 1  0933	D2 00					SETB	LCD_PEND
+ 1123: 1  0935	D0 82					POP DPL
+ 1124: 1  0937	D0 83					POP DPH
+ 1125: 1  0939	D0 D0					POP PSW
+ 1126: 1  093B	D0 E0					POP ACC
+ 1127: 1  093D	22					RET
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 22
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1128: 1
+ 1129: 1
+ 1130: 1
+ 1131: 1  093E			ACCION_SUBIR_PERSIANA:
+ 1132: 1  093E	20 20 05			JB	MOTOR2_STATUSI,ACCION_SP_PARAR
+ 1133: 1  0941	12 15 E7			lcall	EJECUTAR_IM2I
+ 1134: 1  0944	80 E9				JMP	ACCION_UPDATE_EXIT
+ 1135: 1  0946	12 16 17	ACCION_SP_PARAR:LCALL	EJECUTAR_IM2P
+ 1136: 1  0949	C2 20				CLR	MOTOR2_STATUSI
+ 1137: 1  094B	C2 21				CLR	MOTOR2_STATUSD
+ 1138: 1  094D	02 09 2F			LJMP	ACCION_UPDATE_EXIT
+ 1139: 1  0950			ACCION_BAJAR_PERSIANA:
+ 1140: 1  0950	20 21 05			JB	MOTOR2_STATUSD,ACCION_BP_PARAR
+ 1141: 1  0953	12 15 FF			LCALL	EJECUTAR_IM2D
+ 1142: 1  0956	80 D7				JMP	ACCION_UPDATE_EXIT
+ 1143: 1  0958			ACCION_BP_PARAR:
+ 1144: 1  0958	12 16 17			LCALL	EJECUTAR_IM2P
+ 1145: 1  095B	C2 20				CLR	MOTOR2_STATUSI
+ 1146: 1  095D	C2 21				CLR	MOTOR2_STATUSD
+ 1147: 1  095F	02 09 2F			LJMP	ACCION_UPDATE_EXIT
+ 1148: 1  0962			ACCION_LUZ_TECHO_ON:
+ 1149: 1  0962	20 96 04			JB	LUZ_01,ACCION_LUZ_TECHO_OFF
+ 1150: 1  0965	D2 96				SETB	LUZ_01
+ 1151: 1  0967	80 C6				JMP	ACCION_UPDATE_EXIT
+ 1152: 1  0969			ACCION_LUZ_TECHO_OFF:
+ 1153: 1  0969	C2 96				CLR	LUZ_01
+ 1154: 1  096B	80 C2				JMP	ACCION_UPDATE_EXIT
+ 1155: 1
+ 1156: 1  096D			ACCION_LUZ_ESTUDIO_ON:
+ 1157: 1  096D	20 97 04			JB	LUZ_02,ACCION_LUZ_ESTUDIO_OFF
+ 1158: 1  0970	D2 97				SETB	LUZ_02
+ 1159: 1  0972	80 BB				JMP	ACCION_UPDATE_EXIT
+ 1160: 1  0974			ACCION_LUZ_ESTUDIO_OFF:
+ 1161: 1  0974	C2 97				CLR	LUZ_02
+ 1162: 1  0976	80 B7				JMP	ACCION_UPDATE_EXIT
+ 1163: 1
+ 1164: 1
+ 1165: 1
+ 1166: 1  0978			ACCION_LUZ_ESTUDIO_UP:
+ 1167: 1  0978	12 15 99			LCALL	EJECUTAR_IM1I
+ 1168: 1  097B	80 B2				JMP	ACCION_UPDATE_EXIT
+ 1169: 1
+ 1170: 1  097D			ACCION_LUZ_ESTUDIO_DOWN:
+ 1171: 1  097D	12 15 B3			LCALL	EJECUTAR_IM1D
+ 1172: 1  0980	80 AD				JMP	ACCION_UPDATE_EXIT
+ 1173: 1
+ 1174: 1
+ 1175: 1
+ 1176: 1  0982			ACCION_ALARMA_ON_OFF:
+ 1177: 1  0982	D2 16			SETB	LCD_PEND_ALARM
+ 1178: 1  0984	D2 00			SETB	LCD_PEND
+ 1179: 1  0986	20 11 05		JB	ALARMA_STATUS,AA_APAGAR
+ 1180: 1  0989	D2 11			SETB	ALARMA_STATUS
+ 1181: 1  098B	02 09 90		LJMP	ACCION_ALARMA_EXIT
+ 1182: 1  098E			AA_APAGAR:
+ 1183: 1  098E	C2 11			CLR	ALARMA_STATUS
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 23
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1184: 1  0990			ACCION_ALARMA_EXIT:
+ 1185: 1
+ 1186: 1  0990	80 9D			JMP	ACCION_UPDATE_EXIT
+ 1187: 1
+ 1188: 1  0992			ACCION_A_LUZ_01:
+ 1189: 1  0992	D2 16			SETB	LCD_PEND_ALARM
+ 1190: 1  0994	D2 00			SETB	LCD_PEND
+ 1191: 1  0996	20 12 05		JB	ALARMA_LUZ_01,AA_01_OFF
+ 1192: 1  0999	D2 12			SETB	ALARMA_LUZ_01
+ 1193: 1  099B	02 09 90		LJMP	ACCION_ALARMA_EXIT
+ 1194: 1  099E			AA_01_OFF:
+ 1195: 1  099E	C2 12			CLR	ALARMA_LUZ_01
+ 1196: 1  09A0	80 EE			JMP	ACCION_ALARMA_EXIT
+ 1197: 1
+ 1198: 1  09A2			ACCION_A_LUZ_02:
+ 1199: 1  09A2	D2 16			SETB	LCD_PEND_ALARM
+ 1200: 1  09A4	D2 00			SETB	LCD_PEND
+ 1201: 1  09A6	20 13 05		JB	ALARMA_LUZ_02,AA_02_OFF
+ 1202: 1  09A9	D2 13			SETB	ALARMA_LUZ_02
+ 1203: 1  09AB	02 09 90		LJMP	ACCION_ALARMA_EXIT
+ 1204: 1  09AE			AA_02_OFF:
+ 1205: 1  09AE	C2 13			CLR	ALARMA_LUZ_02
+ 1206: 1  09B0	80 DE			JMP	ACCION_ALARMA_EXIT
+ 1207: 1
+ 1208: 1  09B2			ACCION_A_MOTOR_01:
+ 1209: 1  09B2	D2 16			SETB	LCD_PEND_ALARM
+ 1210: 1  09B4	D2 00			SETB	LCD_PEND
+ 1211: 1  09B6	20 14 05		JB	ALARMA_MOTOR_01,AA_M01_OFF
+ 1212: 1  09B9	D2 14			SETB	ALARMA_MOTOR_01
+ 1213: 1  09BB	02 09 90		LJMP	ACCION_ALARMA_EXIT
+ 1214: 1  09BE			AA_M01_OFF:
+ 1215: 1  09BE	C2 14			CLR	ALARMA_MOTOR_01
+ 1216: 1  09C0	80 CE			JMP	ACCION_ALARMA_EXIT
+ 1217: 1  09C2			ACCION_A_MOTOR_02:
+ 1218: 1  09C2	D2 16			SETB	LCD_PEND_ALARM
+ 1219: 1  09C4	D2 00			SETB	LCD_PEND
+ 1220: 1  09C6	20 15 05		JB	ALARMA_MOTOR_02,AA_M02_OFF
+ 1221: 1  09C9	D2 15			SETB	ALARMA_MOTOR_02
+ 1222: 1  09CB	02 09 90		LJMP	ACCION_ALARMA_EXIT
+ 1223: 1  09CE			AA_M02_OFF:
+ 1224: 1  09CE	C2 15			CLR	ALARMA_MOTOR_02
+ 1225: 1  09D0	80 BE			JMP	ACCION_ALARMA_EXIT
+ 1226: 1
+ 1227: 1  09D2			ACCION_ALARMA_HORAS:
+ 1228: 1
+ 1229: 1  09D2	D2 16			SETB	LCD_PEND_ALARM
+ 1230: 1  09D4	D2 00			SETB	LCD_PEND
+ 1231: 1  09D6	E5 3C			MOV	A,ALARMA_HORA
+ 1232: 1  09D8	B4 17 06		CJNE	A,#23,ACCION_AH_1
+ 1233: 1  09DB	75 3C 00		MOV	ALARMA_HORA,#0
+ 1234: 1  09DE	02 09 E5		LJMP	ACCION_AH_2
+ 1235: 1  09E1			ACCION_AH_1:
+ 1236: 1  09E1	05 E0			INC	ACC
+ 1237: 1  09E3	F5 3C			MOV	ALARMA_HORA,A
+ 1238: 1  09E5			ACCION_AH_2:
+ 1239: 1  09E5	80 A9			JMP	ACCION_ALARMA_EXIT
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 24
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1240: 1
+ 1241: 1  09E7			ACCION_ALARMA_MINUTOS:
+ 1242: 1
+ 1243: 1  09E7	D2 16			SETB	LCD_PEND_ALARM
+ 1244: 1  09E9	D2 00			SETB	LCD_PEND
+ 1245: 1  09EB	E5 3D			MOV	A,ALARMA_MINUTO
+ 1246: 1  09ED	B4 3B 06		CJNE	A,#59,ACCION_AM_1
+ 1247: 1  09F0	75 3D 00		MOV	ALARMA_MINUTO,#0
+ 1248: 1  09F3	02 09 FA		LJMP	ACCION_AM_2
+ 1249: 1  09F6			ACCION_AM_1:
+ 1250: 1  09F6	05 E0			INC	ACC
+ 1251: 1  09F8	F5 3D			MOV	ALARMA_MINUTO,A
+ 1252: 1  09FA			ACCION_AM_2:
+ 1253: 1  09FA	80 94			JMP	ACCION_ALARMA_EXIT
+ 1254: 1
+ 1255: 1
+ 1256: 1  09FC			ACCION_RELOJ_HORAS:
+ 1257: 1  09FC	C2 CA			CLR	TR2
+ 1258: 1  09FE	E5 30			MOV	A,CLK_HORAS
+ 1259: 1  0A00	B4 17 05		CJNE	A,#23,ACCION_RH_1
+ 1260: 1  0A03	74 00			MOV	A,#0
+ 1261: 1  0A05	02 0A 09		LJMP	ACCION_RH_2
+ 1262: 1  0A08			ACCION_RH_1:
+ 1263: 1  0A08	04			INC	A
+ 1264: 1  0A09			ACCION_RH_2:
+ 1265: 1  0A09	F5 30			MOV	CLK_HORAS,A
+ 1266: 1  0A0B	D2 CA			SETB	TR2
+ 1267: 1  0A0D	D2 01			SETB	LCD_PEND_TIME
+ 1268: 1  0A0F	D2 00			SETB	LCD_PEND
+ 1269: 1  0A11	02 09 2F		LJMP	ACCION_UPDATE_EXIT
+ 1270: 1
+ 1271: 1  0A14			ACCION_RELOJ_MINUTOS:
+ 1272: 1  0A14	C2 CA			CLR	TR2
+ 1273: 1  0A16	E5 31			MOV	A,CLK_MIN
+ 1274: 1  0A18	B4 3B 05		CJNE	A,#59,ACCION_RM_1
+ 1275: 1  0A1B	74 00			MOV	A,#0
+ 1276: 1  0A1D	02 0A 21		LJMP	ACCION_RM_2
+ 1277: 1  0A20			ACCION_RM_1:
+ 1278: 1  0A20	04			INC	A
+ 1279: 1  0A21			ACCION_RM_2:
+ 1280: 1  0A21	F5 31			MOV	CLK_MIN,A
+ 1281: 1  0A23	D2 CA			SETB	TR2
+ 1282: 1  0A25	75 33 14		MOV	CLK_COUNT,#20
+ 1283: 1  0A28	75 32 00		MOV	CLK_SEG,#0
+ 1284: 1  0A2B	D2 01			SETB	LCD_PEND_TIME
+ 1285: 1  0A2D	D2 00			SETB	LCD_PEND
+ 1286: 1  0A2F	02 09 2F		LJMP	ACCION_UPDATE_EXIT
+ 1287: 1  0A32	02 09 2F		LJMP	ACCION_UPDATE_EXIT
+ 1288:				$INCLUDE(teclado.asm)		; Teclado Matricial	-->  1100H
+ 1289: 1			;		TECLADO
+ 1290: 1
+ 1291: 1	N      1100	ORG 1100H
+ 1292: 1  1100			TECLADO_UPDATE:
+ 1293: 1  1100	C0 E0			PUSH	ACC
+ 1294: 1  1102	D2 B3			SETB	COL2
+ 1295: 1  1104	D2 B2			SETB	COL3
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 25
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1296: 1  1106	C2 B4			CLR	COL1
+ 1297: 1
+ 1298: 1				;; COMPROBAMOS 5 VECES PARA EVITAR EL REBOTE
+ 1299: 1  1108	74 06			MOV	A,#TECLADO_REBOTES
+ 1300: 1
+ 1301: 1  110A	20 B5 07		JB	FIL1,TU_1B
+ 1302: 1  110D	D5 E0 FA		DJNZ	ACC,$-3
+ 1303: 1				;1.1
+ 1304: 1  1110	00			NOP
+ 1305: 1  1111	02 11 9F		LJMP	TECLADO_EXIT
+ 1306: 1
+ 1307: 1  1114	74 06		TU_1B:	MOV	A,#TECLADO_REBOTES
+ 1308: 1  1116	20 B6 0D		JB	FIL2,TU_1C
+ 1309: 1  1119	D5 E0 FA		DJNZ	ACC,$-3
+ 1310: 1				; 2.1
+ 1311: 1  111C	D2 04			SETB	MENU_PEND
+ 1312: 1  111E	D2 06			SETB	MENU_PEND_LEFT
+ 1313: 1  1120	75 3A 0A		MOV	TECLADO_COUNT,#TECLADO_PULSADO
+ 1314: 1  1123	02 11 9F		LJMP	TECLADO_EXIT
+ 1315: 1
+ 1316: 1  1126	74 06		TU_1C:	MOV	A,#TECLADO_REBOTES
+ 1317: 1  1128	20 B7 07		JB	FIL3,TU_2A
+ 1318: 1  112B	D5 E0 FA		DJNZ	ACC,$-3
+ 1319: 1				;; 3.1
+ 1320: 1  112E	00			NOP
+ 1321: 1  112F	02 11 9F		LJMP	TECLADO_EXIT
+ 1322: 1
+ 1323: 1  1132	D2 B4		TU_2A:  SETB	COL1
+ 1324: 1  1134	C2 B3			CLR	COL2
+ 1325: 1  1136	D2 B2			SETB	COL3
+ 1326: 1
+ 1327: 1  1138	74 06			MOV	A,#TECLADO_REBOTES
+ 1328: 1  113A	20 B5 0D		JB	FIL1,TU_2B
+ 1329: 1  113D	D5 E0 FA		DJNZ	ACC,$-3
+ 1330: 1				;2.1
+ 1331: 1  1140	D2 04			SETB	MENU_PEND
+ 1332: 1  1142	D2 05			SETB	MENU_PEND_UP
+ 1333: 1  1144	75 3A 0A		MOV	TECLADO_COUNT,#TECLADO_PULSADO
+ 1334: 1  1147	02 11 9F		LJMP	TECLADO_EXIT
+ 1335: 1
+ 1336: 1  114A	74 06		TU_2B:	MOV	A,#TECLADO_REBOTES
+ 1337: 1  114C	20 B6 0B		JB	FIL2,TU_2C
+ 1338: 1  114F	D5 E0 FA		DJNZ	ACC,$-3
+ 1339: 1				;2.2
+ 1340: 1  1152	D2 09			SETB	ACCION_PEND
+ 1341: 1  1154	75 3A 0A		MOV	TECLADO_COUNT,#TECLADO_PULSADO
+ 1342: 1  1157	02 11 9F		LJMP	TECLADO_EXIT
+ 1343: 1
+ 1344: 1  115A	74 06		TU_2C:	MOV	A,#TECLADO_rEBOTES
+ 1345: 1  115C	20 B7 0D		JB	FIL3,TU_3A
+ 1346: 1  115F	D5 E0 FA		DJNZ	ACC,$-3
+ 1347: 1				;2.3
+ 1348: 1  1162	D2 04			SETB	MENU_PEND
+ 1349: 1  1164	D2 08			SETB	MENU_PEND_DOWN
+ 1350: 1  1166	75 3A 0A		MOV	TECLADO_COUNT,#TECLADO_PULSADO
+ 1351: 1  1169	02 11 9F		LJMP	TECLADO_EXIT
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 26
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1352: 1  116C	D2 B4		TU_3A:	SETB	COL1
+ 1353: 1  116E	D2 B3			SETB	COL2
+ 1354: 1  1170	C2 B2			CLR	COL3
+ 1355: 1
+ 1356: 1  1172	74 06			MOV	A,#TECLADO_REBOTES
+ 1357: 1  1174	20 B5 07		JB	FIL1,TU_3B
+ 1358: 1  1177	D5 E0 FA		DJNZ	ACC,$-3
+ 1359: 1				;;3.1
+ 1360: 1  117A	00			NOP
+ 1361: 1  117B	02 11 9F		LJMP	TECLADO_EXIT
+ 1362: 1
+ 1363: 1  117E	74 06		TU_3B:	MOV	A,#TECLADO_REBOTES
+ 1364: 1  1180	20 B6 0D		JB	FIL2,TU_3C
+ 1365: 1  1183	D5 E0 FA		DJNZ	ACC,$-3
+ 1366: 1				;; 3.2
+ 1367: 1  1186	D2 04			SETB	MENU_PEND
+ 1368: 1  1188	D2 07			SETB	MENU_PEND_RIGHT
+ 1369: 1  118A	75 3A 0A		MOV	TECLADO_COUNT,#TECLADO_PULSADO
+ 1370: 1  118D	02 11 9F		LJMP	TECLADO_EXIT
+ 1371: 1
+ 1372: 1  1190	74 06		TU_3C:	MOV	A,#TECLADO_REBOTES
+ 1373: 1  1192	20 B7 07		JB	FIL3,TU_END
+ 1374: 1  1195	D5 E0 FA		DJNZ	ACC,$-3
+ 1375: 1				;; 3.3
+ 1376: 1  1198	00			NOP
+ 1377: 1  1199	02 11 9F		LJMP	TECLADO_EXIT
+ 1378: 1  119C			TU_END:
+ 1379: 1  119C	75 3A 02		MOV	TECLADO_COUNT,#2
+ 1380: 1  119F			TECLADO_EXIT:
+ 1381: 1  119F	C2 0C			CLR	TECLADO_PEND
+ 1382: 1  11A1	D0 E0			POP	ACC
+ 1383: 1  11A3	22			ret
+ 1384: 1
+ 1385: 1
+ 1386: 1
+ 1387:				$INCLUDE(alarma.asm)		; Alarma		-->  1200H
+ 1388: 1
+ 1389: 1	N      1200	org	1200h
+ 1390: 1
+ 1391: 1
+ 1392: 1  1200			ALARMA_INIT:
+ 1393: 1  1200	C2 10			CLR	ALARMA_PEND
+ 1394: 1  1202	75 3C 00		MOV	ALARMA_HORA,#0
+ 1395: 1  1205	75 3D 00		MOV	ALARMA_MINUTO,#0
+ 1396: 1  1208	C2 11			CLR	ALARMA_STATUS
+ 1397: 1  120A	22				RET
+ 1398: 1
+ 1399: 1
+ 1400: 1  120B			ALARMA_CHECK:
+ 1401: 1  120B	C0 E0				PUSH	ACC
+ 1402: 1  120D	C0 D0				PUSH	PSW
+ 1403: 1  120F	E5 31				MOV	A,CLK_MIN
+ 1404: 1  1211	B5 3D 07			CJNE	A,ALARMA_MINUTO,AC_EXIT
+ 1405: 1  1214	E5 30				MOV	A,CLK_HORAS
+ 1406: 1  1216	B5 3C 02			CJNE	A,ALARMA_HORA,AC_EXIT
+ 1407: 1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 27
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1408: 1  1219	D2 10				SETB	ALARMA_PEND
+ 1409: 1  121B			AC_EXIT:
+ 1410: 1  121B	D0 D0			POP	PSW
+ 1411: 1  121D	D0 E0			POP	ACC
+ 1412: 1  121F	22			RET
+ 1413: 1				;; SE DEBERIA DE HACER LLAMANDO A LAS FUNCIONES
+ 1414: 1				;; DE ACCION, PERO NO SE PUEDE, HABRIA QUE REESCRIBIRLAS
+ 1415: 1				;; YA QUE ESTAS ESTAN DENTRO DE ACCION_UPDATE
+ 1416: 1				;; Y NO SE PUEDEN USAR INDIVIDUALMETNE
+ 1417: 1  1220			ALARMA_UPDATE :
+ 1418: 1  1220	30 11 18		JNB	ALARMA_STATUS,AU_ST4
+ 1419: 1  1223	D2 1C			SETB	LCD_PEND_INFO
+ 1420: 1  1225	30 14 03		JNB	ALARMA_MOTOR_01,AU_ST1
+ 1421: 1  1228	12 15 99		LCALL	EJECUTAR_IM1I
+ 1422: 1  122B	30 12 02	AU_ST1:	JNB	ALARMA_LUZ_01,AU_ST2
+ 1423: 1
+ 1424: 1  122E	D2 96			SETB	LUZ_01
+ 1425: 1  1230	30 13 02	AU_ST2: JNB	ALARMA_LUZ_02,AU_ST3
+ 1426: 1  1233	D2 97			SETB	LUZ_02
+ 1427: 1  1235	30 15 03	AU_ST3:	JNB	ALARMA_MOTOR_02,AU_ST4
+ 1428: 1  1238	12 15 E7		LCALL	EJECUTAR_IM2I
+ 1429: 1
+ 1430: 1  123B	C2 10		AU_ST4:	CLR	ALARMA_PEND
+ 1431: 1  123D	22			RET
+ 1432: 1
+ 1433: 1
+ 1434:				$INCLUDE(rs232.asm)		; Rs232			-->  1300H
+ 1435: 1	N      1300	ORG	1300H
+ 1436: 1
+ 1437: 1
+ 1438: 1  1300	75 F0 0A	RS232_TIME_AUX:		MOV	B,#10
+ 1439: 1  1303	84					DIV	AB
+ 1440: 1  1304	24 30					ADD	A,#'0'
+ 1441: 1  1306	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1442: 1  1309	74 00					MOV	A,#0
+ 1443: 1  130B	25 F0					ADD	A,B
+ 1444: 1  130D	24 30					ADD	A,#'0'
+ 1445: 1  130F	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1446: 1  1312	22					RET
+ 1447: 1
+ 1448: 1
+ 1449: 1
+ 1450: 1  1313			RS232_WRITE_BYTE:
+ 1451: 1
+ 1452: 1  1313	30 0E FD			JNB	RS232_TRANS_READY,$
+ 1453: 1  1316	F5 99				MOV	SBUF,A
+ 1454: 1  1318	C2 0E				CLR	RS232_TRANS_READY
+ 1455: 1  131A	22				RET
+ 1456: 1
+ 1457: 1
+ 1458: 1
+ 1459: 1  131B	E5 30		RS232_WRITE_TIME:	MOV	A,CLK_HORAS
+ 1460: 1  131D	12 13 00				LCALL	RS232_TIME_AUX
+ 1461: 1  1320	74 3A					MOV	A,#':'
+ 1462: 1  1322	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1463: 1  1325	E5 31					MOV	A,CLK_MIN
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 28
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1464: 1  1327	12 13 00				LCALL	RS232_TIME_AUX
+ 1465: 1  132A	74 3A					MOV	A,#':'
+ 1466: 1  132C	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1467: 1  132F	E5 32					MOV	A,CLK_SEG
+ 1468: 1  1331	12 13 00				LCALL	RS232_TIME_AUX
+ 1469: 1  1334	22					RET
+ 1470: 1
+ 1471: 1
+ 1472: 1  1335	30 96 08	RS232_WRITE_TESTIGOS:	JNB	LUZ_01,RS232_WT_01
+ 1473: 1  1338	74 31					MOV	A,#'1'
+ 1474: 1  133A	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1475: 1  133D	02 13 45				LJMP	RS232_WT_02
+ 1476: 1  1340	74 30		RS232_WT_01:		MOV	A,#'0'
+ 1477: 1  1342	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1478: 1
+ 1479: 1
+ 1480: 1  1345	30 97 08	RS232_WT_02:		JNB	LUZ_02,RS232_WT_03
+ 1481: 1  1348	74 31					MOV	A,#'1'
+ 1482: 1  134A	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1483: 1  134D	02 13 55				LJMP	RS232_WT_04
+ 1484: 1  1350	74 30		RS232_WT_03:		MOV	A,#'0'
+ 1485: 1  1352	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1486: 1
+ 1487: 1  1355	22		RS232_WT_04:		RET
+ 1488: 1
+ 1489: 1  1356			RS232_WRITE_ALARMA:
+ 1490: 1  1356	E5 3C					MOV	A,ALARMA_HORA
+ 1491: 1  1358	12 13 00				LCALL   RS232_TIME_AUX
+ 1492: 1  135B	74 3A					MOV	A,#':'
+ 1493: 1  135D	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1494: 1
+ 1495: 1  1360	E5 3D					MOV	A,ALARMA_MINUTO
+ 1496: 1  1362	12 13 00				LCALL	RS232_TIME_AUX
+ 1497: 1  1365	74 20					MOV	A,#' '
+ 1498: 1  1367	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1499: 1
+ 1500: 1  136A	30 14 08	RS232_WA_01:		JNB	ALARMA_MOTOR_01,RS232_WA_01_OFF
+ 1501: 1  136D	74 31					MOV	A,#'1'
+ 1502: 1  136F	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1503: 1
+ 1504: 1  1372	02 13 7A				LJMP	RS232_WA_02
+ 1505: 1  1375	74 30		RS232_WA_01_OFF:	MOV	A,#'0'
+ 1506: 1  1377	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1507: 1  137A	30 15 08	RS232_WA_02:		JNB	ALARMA_MOTOR_02,RS232_WA_02_OFF
+ 1508: 1  137D	74 31					MOV	A,#'1'
+ 1509: 1  137F	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1510: 1  1382	02 13 8A				LJMP	RS232_WA_03
+ 1511: 1  1385	74 30		RS232_WA_02_OFF:	MOV	A,#'0'
+ 1512: 1  1387	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1513: 1  138A	30 12 08	RS232_WA_03:		JNB	ALARMA_LUZ_01,RS232_WA_03_OFF
+ 1514: 1  138D	74 31					MOV	A,#'1'
+ 1515: 1  138F	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1516: 1  1392	02 13 9A				LJMP	RS232_WA_04
+ 1517: 1  1395	74 30		RS232_WA_03_OFF:	MOV	A,#'0'
+ 1518: 1  1397	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1519: 1  139A	30 13 08	RS232_WA_04:		JNB	ALARMA_LUZ_02,RS232_WA_04_OFF
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 29
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1520: 1  139D	74 31					MOV	A,#'1'
+ 1521: 1  139F	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1522: 1  13A2	02 13 AA				LJMP	RS232_WA_05
+ 1523: 1  13A5	74 30		RS232_WA_04_OFF:	MOV	A,#'0'
+ 1524: 1  13A7	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1525: 1  13AA	30 11 08	RS232_WA_05:		JNB	ALARMA_STATUS,RS232_WA_OFF
+ 1526: 1  13AD	74 31		RS232_WA_ON:		MOV	A,#'1'
+ 1527: 1  13AF	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1528: 1  13B2	02 13 BA				LJMP	RS232_WA_EXIT
+ 1529: 1  13B5	74 30		RS232_WA_OFF:		MOV	A,#'0'
+ 1530: 1  13B7	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1531: 1  13BA			RS232_WA_EXIT:
+ 1532: 1  13BA	22					RET
+ 1533: 1
+ 1534: 1
+ 1535: 1  13BB			RS232_REFRESH_MENU:	; PUSH_STATE
+ 1536: 1  13BB	C0 E0					PUSH	ACC
+ 1537: 1  13BD	C0 D0					PUSH	PSW
+ 1538: 1  13BF	C0 83					PUSH	DPH
+ 1539: 1  13C1	C0 82					PUSH	DPL
+ 1540: 1
+ 1541: 1
+ 1542: 1  13C3	D2 D3					SETB	RS0
+ 1543: 1  13C5	C2 D4					CLR	RS1
+ 1544: 1
+ 1545: 1  13C7	12 08 14				LCALL	MENU_MOV_VALIDO
+ 1546: 1  13CA	78 05					MOV	R0,#5
+ 1547: 1  13CC	A3		RS_MENU_INC:		INC	DPTR
+ 1548: 1  13CD	D8 FD					DJNZ	R0,RS_MENU_INC
+ 1549: 1  13CF	79 14					MOV	R1,#20
+ 1550: 1  13D1	74 00		RS_MENU_BUC:		MOV	A,#0
+ 1551: 1  13D3	93					MOVC	A,@A+DPTR
+ 1552: 1  13D4	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1553: 1  13D7	A3					INC	DPTR
+ 1554: 1  13D8	D9 F7					DJNZ	R1,RS_MENU_BUC
+ 1555: 1
+ 1556: 1  13DA	74 20					MOV	A,#' '
+ 1557: 1  13DC	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1558: 1
+ 1559: 1  13DF	12 13 1B				LCALL	RS232_WRITE_TIME
+ 1560: 1
+ 1561: 1  13E2	74 20					MOV	A,#' '
+ 1562: 1  13E4	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1563: 1
+ 1564: 1  13E7	12 13 35				LCALL	RS232_WRITE_TESTIGOS
+ 1565: 1
+ 1566: 1  13EA	74 20					MOV	A,#' '
+ 1567: 1  13EC	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1568: 1
+ 1569: 1  13EF	12 13 56				lcall	RS232_WRITE_ALARMA
+ 1570: 1  13F2	74 0D					MOV	A,#00Dh
+ 1571: 1  13F4	12 13 13				LCALL	RS232_WRITE_BYTE
+ 1572: 1  13F7	C2 0D					CLR	RS232_PEND_MENU
+ 1573: 1  13F9	D0 82					POP	DPL
+ 1574: 1  13FB	D0 83					POP	DPH
+ 1575: 1  13FD	D0 D0					POP	PSW
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 30
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1576: 1  13FF	D0 E0					POP	ACC
+ 1577: 1						; POP_STATE
+ 1578: 1  1401	22					RET
+ 1579: 1
+ 1580: 1  1402	C0 E0		RS232_RECIVE_CHAR:	PUSH	ACC
+ 1581: 1  1404	E5 3B					MOV	A,RS232_CHAR_REC
+ 1582: 1  1406	B4 36 07				CJNE	A,#036H,RS_RC_IZQDA
+ 1583: 1  1409	D2 04		RS_RC_DCHA:		SETB	MENU_PEND
+ 1584: 1  140B	D2 07					SETB	MENU_PEND_RIGHT
+ 1585: 1  140D	02 14 3E				LJMP	RS_RC_EXIT
+ 1586: 1
+ 1587: 1  1410	B4 34 07	RS_RC_IZQDA:		CJNE	A,#034H,RS_RC_UP
+ 1588: 1  1413	D2 04					SETB	MENU_PEND
+ 1589: 1  1415	D2 06					SETB	MENU_PEND_LEFT
+ 1590: 1  1417	02 14 3E				LJMP	RS_RC_EXIT
+ 1591: 1
+ 1592: 1  141A	B4 38 07	RS_RC_UP:		CJNE	A,#038H,RS_RC_DOWN
+ 1593: 1  141D	D2 04					SETB	MENU_PEND
+ 1594: 1  141F	D2 05					SETB	MENU_PEND_UP
+ 1595: 1  1421	02 14 3E				LJMP	RS_RC_EXIT
+ 1596: 1
+ 1597: 1  1424	B4 32 07	RS_RC_DOWN:		CJNE	A,#032H,RS_RC_ENTER
+ 1598: 1  1427	D2 04					SETB	MENU_PEND
+ 1599: 1  1429	D2 08					SETB	MENU_PEND_DOWN
+ 1600: 1  142B	02 14 3E				LJMP	RS_RC_EXIT
+ 1601: 1
+ 1602: 1  142E	B4 35 05	RS_RC_ENTER:		CJNE	A,#035H,RS_RC_UPDATE
+ 1603: 1  1431	D2 09					SETB	ACCION_PEND
+ 1604: 1  1433	02 14 3E				LJMP	RS_RC_EXIT
+ 1605: 1  1436	B4 30 05	RS_RC_UPDATE:		CJNE	A,#030H,RS_RC_EXIT
+ 1606: 1  1439	D2 0D					SETB	RS232_PEND_MENU
+ 1607: 1  143B	02 14 3E				LJMP	RS_RC_EXIT
+ 1608: 1
+ 1609: 1
+ 1610: 1  143E	C2 0F		RS_RC_EXIT:		CLR	RS232_REC_READY
+ 1611: 1  1440	D0 E0					POP	ACC
+ 1612: 1  1442	22					RET
+ 1613:				$INCLUDE(sensores.asm)		; Sensores		-->  1500H
+ 1614: 1	N      1500	org	1500H
+ 1615: 1
+ 1616: 1  1500			SENSORES_UPDATE:
+ 1617: 1  1500	20 82 06		JB	LTOP,SENSORES_UPDATE_1
+ 1618: 1  1503	30 1E 03		JNB	MOTOR1_STATUSI,SENSORES_UPDATE_1
+ 1619: 1  1506	12 15 CD		LCALL	EJECUTAR_IM1P
+ 1620: 1  1509			SENSORES_UPDATE_1:
+ 1621: 1  1509	20 83 06		JB	LBOTTOM,SENSORES_UPDATE_2
+ 1622: 1  150C	30 1F 03		JNB	MOTOR1_STATUSD,SENSORES_UPDATE_2
+ 1623: 1  150F	12 15 CD		LCALL	EJECUTAR_IM1P
+ 1624: 1  1512			SENSORES_UPDATE_2:
+ 1625: 1  1512	20 80 06		JB	PTOP,SENSORES_UPDATE_3
+ 1626: 1  1515	30 20 03		JNB	MOTOR2_STATUSI,SENSORES_UPDATE_3
+ 1627: 1  1518	12 16 17		LCALL	EJECUTAR_IM2P
+ 1628: 1  151B			SENSORES_UPDATE_3:
+ 1629: 1  151B	20 81 06		JB	PBOTTOM,SENSORES_UPDATE_4
+ 1630: 1  151E	30 21 03		JNB	MOTOR2_STATUSD,SENSORES_UPDATE_4
+ 1631: 1  1521	12 16 17		LCALL	EJECUTAR_IM2P
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 31
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1632: 1  1524			SENSORES_UPDATE_4:
+ 1633: 1  1524	C2 1D			CLR	SENSORES_PEND
+ 1634: 1
+ 1635: 1  1526	22			RET
+ 1636: 1
+ 1637:				$INCLUDE(motor.asm)		; Motores		-->  1580H
+ 1638: 1	N      1580	org	1580h
+ 1639: 1  1580			MOTOR_INIT:
+ 1640: 1  1580	C2 1E			CLR	MOTOR1_STATUSI
+ 1641: 1  1582	C2 20			CLR	MOTOR2_STATUSI
+ 1642: 1  1584	C2 1F			CLR	MOTOR1_STATUSD
+ 1643: 1  1586	C2 21			CLR	MOTOR2_STATUSD
+ 1644: 1  1588	12 15 CD		LCALL	EJECUTAR_IM1P
+ 1645: 1  158B	12 16 17		LCALL	EJECUTAR_IM2P
+ 1646: 1  158E	22			RET
+ 1647: 1
+ 1648: 1  158F			DELAY_PIC:
+ 1649: 1  158F	C0 E0			PUSH	ACC
+ 1650: 1  1591	74 FF			MOV	A,#255
+ 1651: 1  1593	D5 E0 FD		DJNZ	ACC,$
+ 1652: 1  1596	D0 E0			POP	ACC
+ 1653: 1  1598	22			RET
+ 1654: 1
+ 1655: 1  1599			EJECUTAR_IM1I:
+ 1656: 1  1599	C2 90			CLR 	MEN
+ 1657: 1  159B	C2 93			CLR	M1
+ 1658: 1  159D	C2 94			CLR	M2
+ 1659: 1  159F	C2 95			CLR	M3
+ 1660: 1  15A1	C2 91			CLR	D1
+ 1661: 1  15A3	C2 92			CLR	D2
+ 1662: 1  15A5	00			NOP
+ 1663: 1  15A6	00			NOP
+ 1664: 1
+ 1665: 1  15A7	D2 90			SETB	MEN
+ 1666: 1  15A9	C2 90			CLR	MEN
+ 1667: 1  15AB	12 15 8F		LCALL	DELAY_PIC
+ 1668: 1  15AE	D2 1E			SETB	MOTOR1_STATUSI
+ 1669: 1  15B0	C2 1F			CLR	MOTOR1_STATUSD
+ 1670: 1  15B2	22		RET
+ 1671: 1
+ 1672: 1				;MOTOR 1 = DERECHA
+ 1673: 1  15B3			EJECUTAR_IM1D:
+ 1674: 1  15B3	C2 90			CLR 	MEN
+ 1675: 1  15B5	C2 93			CLR	M1
+ 1676: 1  15B7	C2 94			CLR	M2
+ 1677: 1  15B9	C2 95			CLR	M3
+ 1678: 1  15BB	D2 91			SETB	D1
+ 1679: 1  15BD	C2 92			CLR	D2
+ 1680: 1  15BF	00			NOP
+ 1681: 1  15C0	00			NOP
+ 1682: 1  15C1	D2 90			SETB	MEN
+ 1683: 1  15C3	C2 90			CLR	MEN
+ 1684: 1  15C5	12 15 8F		LCALL	DELAY_PIC
+ 1685: 1  15C8	D2 1F			SETB	MOTOR1_STATUSD
+ 1686: 1  15CA	C2 1E			CLR	MOTOR1_STATUSI
+ 1687: 1  15CC	22		RET
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 32
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1688: 1				;MOTOR 1 = PARADO
+ 1689: 1  15CD			EJECUTAR_IM1P:
+ 1690: 1  15CD	C2 90			CLR 	MEN
+ 1691: 1  15CF	C2 93			CLR	M1
+ 1692: 1  15D1	C2 94			CLR	M2
+ 1693: 1  15D3	C2 95			CLR	M3
+ 1694: 1  15D5	C2 91			CLR	D1
+ 1695: 1  15D7	D2 92			SETB	D2
+ 1696: 1  15D9	00			NOP
+ 1697: 1  15DA	00			NOP
+ 1698: 1  15DB	D2 90			SETB	MEN
+ 1699: 1  15DD	C2 90			CLR	MEN
+ 1700: 1  15DF	12 15 8F		LCALL	DELAY_PIC
+ 1701: 1  15E2	C2 1E			CLR	MOTOR1_STATUSI
+ 1702: 1  15E4	C2 1F			CLR	MOTOR1_STATUSD
+ 1703: 1  15E6	22		RET
+ 1704: 1				;MOTOR 2 = IZQUIERDA
+ 1705: 1  15E7			EJECUTAR_IM2I:
+ 1706: 1  15E7	C2 90			CLR 	MEN
+ 1707: 1  15E9	D2 93			SETB	M1
+ 1708: 1  15EB	C2 94			CLR	M2
+ 1709: 1  15ED	C2 95			CLR	M3
+ 1710: 1  15EF	C2 91			CLR	D1
+ 1711: 1  15F1	C2 92			CLR	D2
+ 1712: 1  15F3	D2 90			SETB	MEN
+ 1713: 1  15F5	C2 90			CLR	MEN
+ 1714: 1  15F7	12 15 8F		LCALL	DELAY_PIC
+ 1715: 1  15FA	D2 20			SETB	MOTOR2_STATUSI
+ 1716: 1  15FC	C2 21			CLR	MOTOR2_STATUSD
+ 1717: 1  15FE	22		RET
+ 1718: 1
+ 1719: 1				;MOTOR 2 = DERECHA
+ 1720: 1  15FF			EJECUTAR_IM2D:
+ 1721: 1  15FF	C2 90			CLR 	MEN
+ 1722: 1  1601	D2 93			SETB	M1
+ 1723: 1  1603	C2 94			CLR	M2
+ 1724: 1  1605	C2 95			CLR	M3
+ 1725: 1  1607	D2 91			SETB	D1
+ 1726: 1  1609	C2 92			CLR	D2
+ 1727: 1  160B	D2 90			SETB	MEN
+ 1728: 1  160D	C2 90			CLR	MEN
+ 1729: 1  160F	12 15 8F		LCALL	DELAY_PIC
+ 1730: 1  1612	D2 21			SETB	MOTOR2_STATUSD
+ 1731: 1  1614	C2 20			CLR	MOTOR2_STATUSI
+ 1732: 1  1616	22		RET
+ 1733: 1				;MOTOR 2 = PARADO
+ 1734: 1  1617			EJECUTAR_IM2P:
+ 1735: 1  1617	C2 90			CLR 	MEN
+ 1736: 1  1619	D2 93			SETB	M1
+ 1737: 1  161B	C2 94			CLR	M2
+ 1738: 1  161D	C2 95			CLR	M3
+ 1739: 1  161F	C2 91			CLR	D1
+ 1740: 1  1621	D2 92			SETB	D2
+ 1741: 1  1623	D2 90			SETB	MEN
+ 1742: 1  1625	C2 90			CLR	MEN
+ 1743: 1  1627	12 15 8F		LCALL	DELAY_PIC
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 33
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1744: 1  162A	C2 20			CLR	MOTOR2_STATUSI
+ 1745: 1  162C	C2 21			CLR	MOTOR2_STATUSD
+ 1746: 1  162E	22		RET
+ 1747:				$INCLUDE(menudata.asm)		; Menú data		-->  1700H
+ 1748: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+ 1749: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+ 1750: 1			;; MENU DATA
+ 1751: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+ 1752: 1			;; -------------------------------------------------------------------------------------------------
+       1			------
+ 1753: 1
+ 1754: 1	N      1700		ORG 1700H
+ 1755: 1
+ 1756: 1  1700	1E		MENU_ELEMENTS:		DB	30
+ 1757: 1  1701	00 00 00 00	STR_INICIO:		DB	0,0,0,0,0,'  iRoom v0.25       '
+       1  1705	00 20 20 69
+       1  1709	52 6F 6F 6D
+       1  170D	20 76 30 2E
+       1  1711	32 35 20 20
+       1  1715	20 20 20 20
+       1  1719	20
+ 1758: 1  171A	00 00		STR_INICIO_RUT:		DW	00
+ 1759: 1
+ 1760: 1  171C	01 00 00 00	STR_PERSIANA:		DB	MENU_PERSIANA,0,0,0,0,'1. Persiana         '
+       1  1720	00 31 2E 20
+       1  1724	50 65 72 73
+       1  1728	69 61 6E 61
+       1  172C	20 20 20 20
+       1  1730	20 20 20 20
+       1  1734	20
+ 1761: 1  1735	00 00		STR_PERSIANA_RUT:	DW	00
+ 1762: 1
+ 1763: 1  1737	01 01 00 00	STR_SUBIR:		DB	MENU_PERSIANA,1,0,0,0,'1.1 Subir / Parar   '
+       1  173B	00 31 2E 31
+       1  173F	20 53 75 62
+       1  1743	69 72 20 2F
+       1  1747	20 50 61 72
+       1  174B	61 72 20 20
+       1  174F	20
+ 1764: 1  1750	09 3E		STR_SUBIR_RUT:		DW	ACCION_SUBIR_PERSIANA
+ 1765: 1
+ 1766: 1  1752	01 02 00 00	STR_BAJAR:		DB	MENU_PERSIANA,2,0,0,0,'1.2 Bajar / Parar   '
+       1  1756	00 31 2E 32
+       1  175A	20 42 61 6A
+       1  175E	61 72 20 2F
+       1  1762	20 50 61 72
+       1  1766	61 72 20 20
+       1  176A	20
+ 1767: 1  176B	09 50		STR_BAJAR_RUT:		DW	ACCION_BAJAR_PERSIANA
+ 1768: 1
+ 1769: 1  176D	02 00 00 00	STR_LUZ:		DB	MENU_LUZ,0,0,0,0,'2. Luces            '
+       1  1771	00 32 2E 20
+       1  1775	4C 75 63 65
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 34
+
+
+
+ Line  I  Addr  Code            Source
+
+       1  1779	73 20 20 20
+       1  177D	20 20 20 20
+       1  1781	20 20 20 20
+       1  1785	20
+ 1770: 1  1786	00 00		STR_LUZ_RUT:		DW	00
+ 1771: 1
+ 1772: 1  1788	02 01 00 00	STR_LUZ_TECHO:		DB	MENU_LUZ,1,0,0,0,'2.1 Luz techo       '
+       1  178C	00 32 2E 31
+       1  1790	20 4C 75 7A
+       1  1794	20 74 65 63
+       1  1798	68 6F 20 20
+       1  179C	20 20 20 20
+       1  17A0	20
+ 1773: 1  17A1	00 00		STR_LUZ_TECHO_RUT:	DW	00
+ 1774: 1
+ 1775: 1  17A3	02 01 01 00	STR_LUZ_TECHO_ON:	DB	MENU_LUZ,1,1,0,0,'2.1.1 On / Off      '
+       1  17A7	00 32 2E 31
+       1  17AB	2E 31 20 4F
+       1  17AF	6E 20 2F 20
+       1  17B3	4F 66 66 20
+       1  17B7	20 20 20 20
+       1  17BB	20
+ 1776: 1  17BC	09 62		STR_LUZ_TECHO_ON_RUT:	DW	ACCION_LUZ_TECHO_ON
+ 1777: 1
+ 1778: 1  17BE	02 02 00 00	STR_LUZ_ESTUDIO:	DB	MENU_LUZ,2,0,0,0,'2.2 Luz estudio     '
+       1  17C2	00 32 2E 32
+       1  17C6	20 4C 75 7A
+       1  17CA	20 65 73 74
+       1  17CE	75 64 69 6F
+       1  17D2	20 20 20 20
+       1  17D6	20
+ 1779: 1  17D7	00 00		STR_LUZ_ESTUDIO_RUT:	DW	00
+ 1780: 1
+ 1781: 1  17D9	02 02 01 00	STR_LUZ_ESTUDIO_ON:	DB	MENU_LUZ,2,1,0,0,'2.2.1 On / Off      '
+       1  17DD	00 32 2E 32
+       1  17E1	2E 31 20 4F
+       1  17E5	6E 20 2F 20
+       1  17E9	4F 66 66 20
+       1  17ED	20 20 20 20
+       1  17F1	20
+ 1782: 1  17F2	09 6D		STR_LUZ_ESTUDIO_ON_RUT:	DW	ACCION_LUZ_ESTUDIO_ON
+ 1783: 1
+ 1784: 1  17F4	02 02 02 00	STR_LUZ_ESTUDIO_UP:	DB	MENU_LUZ,2,2,0,0,'2.2.2 Subir / Parar '
+       1  17F8	00 32 2E 32
+       1  17FC	2E 32 20 53
+       1  1800	75 62 69 72
+       1  1804	20 2F 20 50
+       1  1808	61 72 61 72
+       1  180C	20
+ 1785: 1  180D	09 78		STR_LUZ_ESTUDIO_UP_RUT:	DW	ACCION_LUZ_ESTUDIO_UP
+ 1786: 1
+ 1787: 1  180F	02 02 03 00	STR_LUZ_ESTUDIO_DOWN:	DB	MENU_LUZ,2,3,0,0,'2.2.3 Bajar / Parar '
+       1  1813	00 32 2E 32
+       1  1817	2E 33 20 42
+       1  181B	61 6A 61 72
+       1  181F	20 2F 20 50
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 35
+
+
+
+ Line  I  Addr  Code            Source
+
+       1  1823	61 72 61 72
+       1  1827	20
+ 1788: 1  1828			STR_LUZ_ESTUDIO_DOWN_RUT:
+ 1789: 1  1828	09 7D					DW	ACCION_LUZ_ESTUDIO_DOWN
+ 1790: 1
+ 1791: 1  182A	03 00 00 00	STR_ALARMA:		DB	MENU_ALARMA,0,0,0,0,'3. Alarma           '
+       1  182E	00 33 2E 20
+       1  1832	41 6C 61 72
+       1  1836	6D 61 20 20
+       1  183A	20 20 20 20
+       1  183E	20 20 20 20
+       1  1842	20
+ 1792: 1  1843	00 00		STR_ALARMA_RUN:		DW	00
+ 1793: 1
+ 1794: 1  1845	03 01 00 00	STR_ALARMA_ON_OFF:	DB	MENU_ALARMA,1,0,0,0,'3.1 On / Off        '
+       1  1849	00 33 2E 31
+       1  184D	20 4F 6E 20
+       1  1851	2F 20 4F 66
+       1  1855	66 20 20 20
+       1  1859	20 20 20 20
+       1  185D	20
+ 1795: 1  185E	09 82		STR_ALARMA_ON_OFF_RUT:	DW	ACCION_ALARMA_ON_OFF
+ 1796: 1
+ 1797: 1  1860	03 02 00 00	STR_ALARMA_ESTABLECER:	DB	MENU_ALARMA,2,0,0,0,'3.2 Establecer hora '
+       1  1864	00 33 2E 32
+       1  1868	20 45 73 74
+       1  186C	61 62 6C 65
+       1  1870	63 65 72 20
+       1  1874	68 6F 72 61
+       1  1878	20
+ 1798: 1  1879			STR_ALARMA_ESTABLECER_RUT:
+ 1799: 1  1879	00 00					DW	00
+ 1800: 1  187B	03 02 01 00	STR_ALARMA_HORAS:	DB	MENU_ALARMA,2,1,0,0,'3.2.1 Horas         '
+       1  187F	00 33 2E 32
+       1  1883	2E 31 20 48
+       1  1887	6F 72 61 73
+       1  188B	20 20 20 20
+       1  188F	20 20 20 20
+       1  1893	20
+ 1801: 1  1894			STR_ALARMA_HORAS_RUT:
+ 1802: 1  1894	09 D2					DW	ACCION_ALARMA_HORAS
+ 1803: 1  1896	03 02 02 00	STR_ALARMA_MINUTOS:	DB	MENU_ALARMA,2,2,0,0,'3.2.2 Minutos       '
+       1  189A	00 33 2E 32
+       1  189E	2E 32 20 4D
+       1  18A2	69 6E 75 74
+       1  18A6	6F 73 20 20
+       1  18AA	20 20 20 20
+       1  18AE	20
+ 1804: 1  18AF			STR_ALARMA_MINUTOS_RUT:
+ 1805: 1  18AF	09 E7					DW	ACCION_ALARMA_MINUTOS
+ 1806: 1  18B1	03 03 00 00	STR_ALARMA_CONFIGURAR:	DB	MENU_ALARMA,3,0,0,0,'3.3 Config acciones '
+       1  18B5	00 33 2E 33
+       1  18B9	20 43 6F 6E
+       1  18BD	66 69 67 20
+       1  18C1	61 63 63 69
+       1  18C5	6F 6E 65 73
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 36
+
+
+
+ Line  I  Addr  Code            Source
+
+       1  18C9	20
+ 1807: 1  18CA	00 00					DW	00
+ 1808: 1  18CC	03 03 01 00	STR_ALARMA_CONF_L1:	DB	MENU_ALARMA,3,1,0,0,'3.3.1 Luz 01        '
+       1  18D0	00 33 2E 33
+       1  18D4	2E 31 20 4C
+       1  18D8	75 7A 20 30
+       1  18DC	31 20 20 20
+       1  18E0	20 20 20 20
+       1  18E4	20
+ 1809: 1  18E5	09 92					DW	ACCION_A_LUZ_01
+ 1810: 1  18E7	03 03 02 00	STR_ALARMA_CONF_L2:	DB	MENU_ALARMA,3,2,0,0,'3.3.2 Luz 02        '
+       1  18EB	00 33 2E 33
+       1  18EF	2E 32 20 4C
+       1  18F3	75 7A 20 30
+       1  18F7	32 20 20 20
+       1  18FB	20 20 20 20
+       1  18FF	20
+ 1811: 1  1900	09 A2					DW	ACCION_A_LUZ_02
+ 1812: 1  1902	03 03 03 00	STR_ALARMA_CONF_M1:	DB	MENU_ALARMA,3,3,0,0,'3.3.3 Subir Luz     '
+       1  1906	00 33 2E 33
+       1  190A	2E 33 20 53
+       1  190E	75 62 69 72
+       1  1912	20 4C 75 7A
+       1  1916	20 20 20 20
+       1  191A	20
+ 1813: 1  191B	09 B2					DW	ACCION_A_MOTOR_01
+ 1814: 1
+ 1815: 1  191D	03 03 04 00	STR_ALARMA_CONF_M2:	DB	MENU_ALARMA,3,4,0,0,'3.3.4 Subir persiana'
+       1  1921	00 33 2E 33
+       1  1925	2E 34 20 53
+       1  1929	75 62 69 72
+       1  192D	20 70 65 72
+       1  1931	73 69 61 6E
+       1  1935	61
+ 1816: 1  1936	09 C2					DW	ACCION_A_MOTOR_02
+ 1817: 1  1938	04 00 00 00	STR_RELOJ:		DB	MENU_RELOJ,0,0,0,0,'4. Reloj            '
+       1  193C	00 34 2E 20
+       1  1940	52 65 6C 6F
+       1  1944	6A 20 20 20
+       1  1948	20 20 20 20
+       1  194C	20 20 20 20
+       1  1950	20
+ 1818: 1  1951	00 00					DW	00
+ 1819: 1  1953	04 01 00 00	STR_RELOJ_HORAS:	DB	MENU_RELOJ,1,0,0,0,'4.1 Horas           '
+       1  1957	00 34 2E 31
+       1  195B	20 48 6F 72
+       1  195F	61 73 20 20
+       1  1963	20 20 20 20
+       1  1967	20 20 20 20
+       1  196B	20
+ 1820: 1  196C	09 FC					DW	ACCION_RELOJ_HORAS
+ 1821: 1  196E	04 02 00 00	STR_RELOJ_MINUTOS:	DB	MENU_RELOJ,2,0,0,0,'4.2 Minutos         '
+       1  1972	00 34 2E 32
+       1  1976	20 4D 69 6E
+       1  197A	75 74 6F 73
+       1  197E	20 20 20 20
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 37
+
+
+
+ Line  I  Addr  Code            Source
+
+       1  1982	20 20 20 20
+       1  1986	20
+ 1822: 1  1987	0A 14					DW	ACCION_RELOJ_MINUTOS
+ 1823: 1
+ 1824: 1
+ 1825: 1
+ 1826:		N      0000		ORG 0000H
+ 1827:
+ 1828:	  0000	02 01 00				LJMP START
+ 1829:
+ 1830:		N      0100		ORG 0100H
+ 1831:
+ 1832:	  0100	75 81 80	START:			MOV	SP,#80H
+ 1833:	  0103	C2 D3					CLR	RS0
+ 1834:	  0105	D2 D4					SETB	RS1
+ 1835:	  0107	53 90 0F				ANL	P1,#00FH
+ 1836:
+ 1837:	  010A	12 03 00				LCALL REAL_TIME_INIT
+ 1838:	  010D	12 07 00				LCALL MENU_INIT
+ 1839:	  0110	12 02 61				LCALL INTERRUPT_INIT
+ 1840:	  0113	12 04 59				LCALL LCD_INIT
+ 1841:	  0116	12 12 00				LCALL ALARMA_INIT
+ 1842:	  0119	12 15 80				LCALL MOTOR_INIT
+ 1843:
+ 1844:
+ 1845:
+ 1846:
+ 1847:
+ 1848:	  011C	30 04 03	BUCLE_CENTRAL:		JNB	MENU_PEND, BC_STAGE1
+ 1849:	  011F	12 07 16				LCALL	MENU_UPDATE
+ 1850:	  0122	30 00 03	BC_STAGE1:		JNB	LCD_PEND, BC_STAGE2
+ 1851:	  0125	12 06 31				LCALL	LCD_UPDATE
+ 1852:	  0128	30 09 03	BC_STAGE2:		JNB	ACCION_PEND, BC_STAGE3
+ 1853:	  012B	12 09 00				LCALL	ACCION_UPDATE
+ 1854:	  012E	30 0C 03	BC_STAGE3:		JNB	TECLADO_PEND, BC_STAGE4
+ 1855:	  0131	12 11 00				LCALL	TECLADO_UPDATE
+ 1856:	  0134	30 0F 03	BC_STAGE4:		JNB	RS232_REC_READY,BC_STAGE5
+ 1857:	  0137	12 14 02				LCALL	RS232_RECIVE_CHAR
+ 1858:	  013A	30 0D 03	BC_STAGE5:		JNB	RS232_PEND_MENU,BC_STAGE6
+ 1859:	  013D	12 13 BB				LCALL	RS232_REFRESH_MENU
+ 1860:	  0140	30 10 03	BC_STAGE6:		JNB	ALARMA_PEND,BC_STAGE7
+ 1861:	  0143	12 12 20				LCALL	ALARMA_UPDATE
+ 1862:	  0146	30 1D 03	BC_STAGE7:		JNB	SENSORES_PEND,BC_STAGE8
+ 1863:	  0149	12 15 00				LCALL	SENSORES_UPDATE
+ 1864:
+ 1865:	  014C	02 01 1C	BC_STAGE8:		LJMP	BUCLE_CENTRAL
+ 1866:
+ 1867:							END
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 38
+
+
+
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 39
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AA_01_OFF			  CODE	    099E	1194
+AA_02_OFF			  CODE	    09AE	1204
+AA_APAGAR			  CODE	    098E	1182
+AA_M01_OFF			  CODE	    09BE	1214
+AA_M02_OFF			  CODE	    09CE	1223
+AC				  BIT	      D6	  91
+ACC				  DATA	      E0	  36
+ACCION_AH_1			  CODE	    09E1	1235
+ACCION_AH_2			  CODE	    09E5	1238
+ACCION_ALARMA_EXIT		  CODE	    0990	1184
+ACCION_ALARMA_HORAS		  CODE	    09D2	1227
+ACCION_ALARMA_MINUTOS		  CODE	    09E7	1241
+ACCION_ALARMA_ON_OFF		  CODE	    0982	1176
+ACCION_AM_1			  CODE	    09F6	1249
+ACCION_AM_2			  CODE	    09FA	1252
+ACCION_A_LUZ_01			  CODE	    0992	1188
+ACCION_A_LUZ_02			  CODE	    09A2	1198
+ACCION_A_MOTOR_01		  CODE	    09B2	1208
+ACCION_A_MOTOR_02		  CODE	    09C2	1217
+ACCION_BAJAR_PERSIANA		  CODE	    0950	1139
+ACCION_BP_PARAR			  CODE	    0958	1143
+ACCION_LUZ_ESTUDIO_DOWN		  CODE	    097D	1170
+ACCION_LUZ_ESTUDIO_OFF		  CODE	    0974	1160
+ACCION_LUZ_ESTUDIO_ON		  CODE	    096D	1156
+ACCION_LUZ_ESTUDIO_UP		  CODE	    0978	1166
+ACCION_LUZ_TECHO_OFF		  CODE	    0969	1152
+ACCION_LUZ_TECHO_ON		  CODE	    0962	1148
+ACCION_PEND			  BIT	      09	 146
+ACCION_RELOJ_HORAS		  CODE	    09FC	1256
+ACCION_RELOJ_MINUTOS		  CODE	    0A14	1271
+ACCION_RH_1			  CODE	    0A08	1262
+ACCION_RH_2			  CODE	    0A09	1264
+ACCION_RM_1			  CODE	    0A20	1277
+ACCION_RM_2			  CODE	    0A21	1279
+ACCION_SP_PARAR			  CODE	    0946	1135
+ACCION_SUBIR_PERSIANA		  CODE	    093E	1131
+ACCION_UPDATE			  CODE	    0900	1090
+ACCION_UPDATE_EXIT		  CODE	    092F	1120
+ACCION_UPDATE_INC		  CODE	    0913	1102
+ACCION_UPDATE_SALTO		  CODE	    0928	1115
+AC_EXIT				  CODE	    121B	1409
+ALARMA_CHECK			  CODE	    120B	1400
+ALARMA_HORA			  IDATA	      3C	 191
+ALARMA_INIT			  CODE	    1200	1392
+ALARMA_LUZ_01			  BIT	      12	 155
+ALARMA_LUZ_02			  BIT	      13	 156
+ALARMA_MINUTO			  IDATA	      3D	 192
+ALARMA_MOTOR_01			  BIT	      14	 157
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 40
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+ALARMA_MOTOR_02			  BIT	      15	 158
+ALARMA_PEND			  BIT	      10	 153
+ALARMA_STATUS			  BIT	      11	 154
+ALARMA_UPDATE			  CODE	    1220	1417
+AU_ST1				  CODE	    122B	1422
+AU_ST2				  CODE	    1230	1425
+AU_ST3				  CODE	    1235	1427
+AU_ST4				  CODE	    123B	1430
+B				  DATA	      F0	  37
+BC_STAGE1			  CODE	    0122	1850
+BC_STAGE2			  CODE	    0128	1852
+BC_STAGE3			  CODE	    012E	1854
+BC_STAGE4			  CODE	    0134	1856
+BC_STAGE5			  CODE	    013A	1858
+BC_STAGE6			  CODE	    0140	1860
+BC_STAGE7			  CODE	    0146	1862
+BC_STAGE8			  CODE	    014C	1865
+BG_RE1				  CODE	    0639	 815
+BG_RE2				  CODE	    063F	 817
+BG_RE_EXIT			  CODE	    0645	 820
+BG_RI1				  CODE	    0616	 799
+BG_RI2				  CODE	    061C	 801
+BG_RI3				  CODE	    0622	 803
+BG_RI4				  CODE	    0628	 805
+BG_RI5				  CODE	    062E	 807
+BUCLE_CENTRAL			  CODE	    011C	1848
+CLK_COUNT			  IDATA	      33	 179
+CLK_EXIT			  CODE	    0351	 464
+CLK_HORAS			  IDATA	      30	 176
+CLK_INC_HORAS			  CODE	    034C	 462
+CLK_INC_MIN			  CODE	    0344	 459
+CLK_INC_SEG			  CODE	    033F	 457
+CLK_MIN				  IDATA	      31	 177
+CLK_NEXT			  CODE	    0258	 369
+CLK_SEG				  IDATA	      32	 178
+CLK_UPDATE			  CODE	    0321	 446
+COL1				  BIT	      B4	 219
+COL2				  BIT	      B3	 220
+COL3				  BIT	      B2	 221
+CPRL2				  BIT	      C8	  78
+CT2				  BIT	      C9	  79
+CY				  BIT	      D7	  92
+D1				  BIT	      91	 212
+D2				  BIT	      92	 213
+DAT				  NUMBER    00A0	 231
+DB4				  NUMBER    00A4	 235
+DB5				  NUMBER    00A5	 236
+DB6				  NUMBER    00A6	 237
+DB7				  NUMBER    00A7	 238
+DELAY_PIC			  CODE	    158F	1648
+DPH				  DATA	      83	  15
+DPL				  DATA	      82	  14
+EA				  BIT	      AF	  63
+EJECUTAR_IM1D			  CODE	    15B3	1673
+EJECUTAR_IM1I			  CODE	    1599	1655
+EJECUTAR_IM1P			  CODE	    15CD	1689
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 41
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+EJECUTAR_IM2D			  CODE	    15FF	1720
+EJECUTAR_IM2I			  CODE	    15E7	1705
+EJECUTAR_IM2P			  CODE	    1617	1734
+EN				  NUMBER    00A3	 234
+ES				  BIT	      AC	  61
+ET0				  BIT	      A9	  58
+ET1				  BIT	      AB	  60
+ET2				  BIT	      AD	  62
+EX0				  BIT	      A8	  57
+EX1				  BIT	      AA	  59
+EXEN2				  BIT	      CB	  81
+EXF2				  BIT	      CE	  84
+EXTI0				  CODE	    0003	  95
+EXTI1				  CODE	    0013	  97
+F0				  BIT	      D5	  90
+FIL1				  BIT	      B5	 222
+FIL2				  BIT	      B6	 223
+FIL3				  BIT	      B7	 224
+IE				  DATA	      A8	  27
+IE0				  BIT	      89	  40
+IE1				  BIT	      8B	  42
+INT0				  BIT	      B2	  66
+INT1				  BIT	      B3	  67
+INTERRUPT_INIT			  CODE	    0261	 382
+IP				  DATA	      B8	  29
+IT0				  BIT	      88	  39
+IT1				  BIT	      8A	  41
+LBOTTOM				  NUMBER    0083	 248
+LCD_BORRAR_INFO			  CODE	    05B9	 756
+LCD_CLEAR			  CODE	    044E	 543
+LCD_INIT			  CODE	    0459	 553
+LCD_PEND			  BIT	      00	 135
+LCD_PEND_ALARM			  BIT	      16	 160
+LCD_PEND_INFO			  BIT	      1C	 166
+LCD_PEND_MENU			  BIT	      02	 137
+LCD_PEND_MOTOR			  BIT	      03	 138
+LCD_PEND_TIME			  BIT	      01	 136
+LCD_RA_01			  CODE	    0562	 720
+LCD_RA_01_OFF			  CODE	    056D	 725
+LCD_RA_02			  CODE	    0572	 727
+LCD_RA_02_OFF			  CODE	    057D	 731
+LCD_RA_03			  CODE	    0582	 733
+LCD_RA_03_OFF			  CODE	    058D	 737
+LCD_RA_04			  CODE	    0592	 739
+LCD_RA_04_OFF			  CODE	    059D	 743
+LCD_RA_05			  CODE	    05A2	 745
+LCD_RA_EXIT			  CODE	    05B1	 751
+LCD_RA_OFF			  CODE	    05AF	 750
+LCD_RA_ON			  CODE	    05AA	 748
+LCD_READ_2_NIBBLES		  CODE	    0400	 483
+LCD_REFRESH_ALARM		  CODE	    0541	 701
+LCD_REFRESH_INFO		  CODE	    0610	 796
+LCD_REFRESH_INICIAL		  CODE	    05F4	 784
+LCD_REFRESH_LUZ			  CODE	    0609	 793
+LCD_REFRESH_MENU		  CODE	    050F	 667
+LCD_REFRESH_PERSIANA		  CODE	    05FB	 787
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 42
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+LCD_REFRESH_RELOJ		  CODE	    0602	 790
+LCD_REFRESH_STATUS		  CODE	    05CB	 765
+LCD_REFRESH_TIME		  CODE	    04C4	 616
+LCD_RS_01_OFF			  CODE	    05DE	 772
+LCD_RS_02			  CODE	    05E3	 774
+LCD_RS_02_OFF			  CODE	    05EE	 778
+LCD_RS_03			  CODE	    05F3	 780
+LCD_UPDATE			  CODE	    0631	 812
+LCD_WAIT			  CODE	    0438	 523
+LCD_WAIT_5MS			  CODE	    04AB	 600
+LCD_WRITE_2_NIBBLES		  CODE	    041C	 505
+LCD_WRITE_TEXT			  CODE	    0445	 535
+LTOP				  NUMBER    0082	 247
+LUZ_01				  NUMBER    0096	 227
+LUZ_02				  NUMBER    0097	 228
+M1				  BIT	      93	 214
+M2				  BIT	      94	 215
+M3				  BIT	      95	 216
+MEN				  BIT	      90	 211
+MENU_ALARMA			  NUMBER    0003	 243
+MENU_CHECK_EXIT			  CODE	    0811	1018
+MENU_CHECK_ST1			  CODE	    07F1	1005
+MENU_CHECK_ST2			  CODE	    07F9	1008
+MENU_CHECK_ST3			  CODE	    0801	1011
+MENU_CHECK_ST4			  CODE	    0809	1014
+MENU_COMPROBAR_MOV		  CODE	    07BC	 973
+MENU_COMPROBAR_MOV_EXIT		  CODE	    07D6	 985
+MENU_C_M_01			  CODE	    07CB	 979
+MENU_ELEMENTS			  CODE	    1700	1756
+MENU_INICIAL			  NUMBER    0000	 240
+MENU_INIT			  CODE	    0700	 833
+MENU_LUZ			  NUMBER    0002	 242
+MENU_MOV_DOWN			  CODE	    0793	 934
+MENU_MOV_DOWN_BUC		  CODE	    0797	 936
+MENU_MOV_DOWN_ST1		  CODE	    07AA	 946
+MENU_MOV_LEFT			  CODE	    0735	 873
+MENU_MOV_LEFT_BUC		  CODE	    0739	 875
+MENU_MOV_LEFT_END		  CODE	    074C	 885
+MENU_MOV_NO_VALIDO		  CODE	    07D4	 983
+MENU_MOV_RIGHT			  CODE	    0774	 914
+MENU_MOV_RIGHT_BUC		  CODE	    0778	 916
+MENU_MOV_RIGHT_END		  CODE	    078E	 927
+MENU_MOV_RIGHT_ST1		  CODE	    0780	 920
+MENU_MOV_UP			  CODE	    0751	 891
+MENU_MOV_UP_BUC			  CODE	    0755	 893
+MENU_MOV_UP_ST1			  CODE	    0768	 903
+MENU_MOV_UP_ST2			  CODE	    076E	 905
+MENU_MOV_VALIDO			  CODE	    0814	1027
+MENU_MOV_VALIDO_BUC		  CODE	    0824	1039
+MENU_MOV_VALIDO_ST1		  CODE	    0828	1041
+MENU_NODO1			  IDATA	      34	 181
+MENU_NODO2			  IDATA	      35	 182
+MENU_NODO3			  IDATA	      36	 183
+MENU_NODO4			  IDATA	      37	 184
+MENU_NODO5			  IDATA	      38	 185
+MENU_NODO_ALARMA		  BIT	      18	 162
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 43
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+MENU_NODO_CHECK			  CODE	    07DB	 995
+MENU_NODO_INICIAL		  BIT	      17	 161
+MENU_NODO_LUZ			  BIT	      1B	 165
+MENU_NODO_PERSIANA		  BIT	      19	 163
+MENU_NODO_RELOJ			  BIT	      1A	 164
+MENU_PEND			  BIT	      04	 140
+MENU_PEND_DOWN			  BIT	      08	 144
+MENU_PEND_LEFT			  BIT	      06	 142
+MENU_PEND_RIGHT			  BIT	      07	 143
+MENU_PEND_UP			  BIT	      05	 141
+MENU_PERSIANA			  NUMBER    0001	 241
+MENU_REALIZAR_MOV		  CODE	    071A	 857
+MENU_REALIZAR_MOV_EXIT		  CODE	    07B0	 956
+MENU_REALIZAR_MOV_EXIT_ST1	  CODE	    07B3	 958
+MENU_RELOJ			  NUMBER    0004	 244
+MENU_RS232			  NUMBER    0005	 245
+MENU_UPDATE			  CODE	    0716	 847
+MENU_VL_ESVALIDO		  CODE	    083B	1052
+MENU_VL_EXIT			  CODE	    0848	1060
+MENU_VL_EXIT_ESVAL		  CODE	    084F	1066
+MENU_VL_INC_27			  CODE	    0843	1056
+MENU_VL_NEXT_ENTRY		  CODE	    0841	1055
+MENU_VL_SIG			  CODE	    0836	1049
+MOTOR1_STATUSD			  BIT	      1F	 169
+MOTOR1_STATUSI			  BIT	      1E	 168
+MOTOR2_STATUSD			  BIT	      21	 171
+MOTOR2_STATUSI			  BIT	      20	 170
+MOTOR_ACTUAL			  IDATA	      39	 187
+MOTOR_INIT			  CODE	    1580	1639
+OV				  BIT	      D2	  87
+P				  BIT	      D0	  86
+P0				  DATA	      80	  12
+P1				  DATA	      90	  23
+P2				  DATA	      A0	  26
+P3				  DATA	      B0	  28
+PBOTTOM				  NUMBER    0081	 250
+PCON				  DATA	      87	  16
+POP_STATE			  MACRO	        	 115
+PS				  BIT	      BC	  76
+PSW				  DATA	      D0	  35
+PT0				  BIT	      B9	  73
+PT1				  BIT	      BB	  75
+PT2				  BIT	      BD	  77
+PTOP				  NUMBER    0080	 249
+PUSH_STATE			  MACRO	        	 108
+PX0				  BIT	      B8	  72
+PX1				  BIT	      BA	  74
+RB8				  BIT	      9A	  51
+RCAP2H				  DATA	      CB	  32
+RCAP2L				  DATA	      CA	  31
+RCLK				  BIT	      CD	  83
+RD				  BIT	      B7	  71
+REAL_TIME_INIT			  CODE	    0300	 427
+REFRESH_MENU_BUC		  CODE	    052D	 686
+REFRESH_MENU_INC		  CODE	    0528	 683
+REN				  BIT	      9C	  53
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 44
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RESET				  CODE	    0000	  94
+RI				  BIT	      98	  49
+RS				  NUMBER    00A1	 232
+RS0				  BIT	      D3	  88
+RS1				  BIT	      D4	  89
+RS232_CHAR_REC			  IDATA	      3B	 190
+RS232_PEND_MENU			  BIT	      0D	 149
+RS232_RECIVE_CHAR		  CODE	    1402	1580
+RS232_REC_READY			  BIT	      0F	 151
+RS232_REFRESH_MENU		  CODE	    13BB	1535
+RS232_TIME_AUX			  CODE	    1300	1438
+RS232_TRANS_READY		  BIT	      0E	 150
+RS232_WA_01			  CODE	    136A	1500
+RS232_WA_01_OFF			  CODE	    1375	1505
+RS232_WA_02			  CODE	    137A	1507
+RS232_WA_02_OFF			  CODE	    1385	1511
+RS232_WA_03			  CODE	    138A	1513
+RS232_WA_03_OFF			  CODE	    1395	1517
+RS232_WA_04			  CODE	    139A	1519
+RS232_WA_04_OFF			  CODE	    13A5	1523
+RS232_WA_05			  CODE	    13AA	1525
+RS232_WA_EXIT			  CODE	    13BA	1531
+RS232_WA_OFF			  CODE	    13B5	1529
+RS232_WA_ON			  CODE	    13AD	1526
+RS232_WRITE_ALARMA		  CODE	    1356	1489
+RS232_WRITE_BYTE		  CODE	    1313	1450
+RS232_WRITE_TESTIGOS		  CODE	    1335	1472
+RS232_WRITE_TIME		  CODE	    131B	1459
+RS232_WT_01			  CODE	    1340	1476
+RS232_WT_02			  CODE	    1345	1480
+RS232_WT_03			  CODE	    1350	1484
+RS232_WT_04			  CODE	    1355	1487
+RS_MENU_BUC			  CODE	    13D1	1550
+RS_MENU_INC			  CODE	    13CC	1547
+RS_RC_DCHA			  CODE	    1409	1583
+RS_RC_DOWN			  CODE	    1424	1597
+RS_RC_ENTER			  CODE	    142E	1602
+RS_RC_EXIT			  CODE	    143E	1610
+RS_RC_IZQDA			  CODE	    1410	1587
+RS_RC_UP			  CODE	    141A	1592
+RS_RC_UPDATE			  CODE	    1436	1605
+RTI_RS232			  CODE	    0200	 299
+RTI_RS_EXIT			  CODE	    021A	 313
+RTI_RS_READ			  CODE	    020B	 304
+RTI_RS_WRITE			  CODE	    0216	 310
+RTI_TIMER0			  CODE	    021F	 325
+RTI_TIMER0_1			  CODE	    0237	 336
+RTI_TIMER2			  CODE	    0248	 361
+RW				  NUMBER    00A2	 233
+RXD				  BIT	      B0	  64
+SBUF				  DATA	      99	  25
+SCON				  DATA	      98	  24
+SENSORES_COUNT			  IDATA	      3E	 193
+SENSORES_ESPERAR		  NUMBER    0001	 203
+SENSORES_PEND			  BIT	      1D	 167
+SENSORES_UPDATE			  CODE	    1500	1616
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 45
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+SENSORES_UPDATE_1		  CODE	    1509	1620
+SENSORES_UPDATE_2		  CODE	    1512	1624
+SENSORES_UPDATE_3		  CODE	    151B	1628
+SENSORES_UPDATE_4		  CODE	    1524	1632
+SINT				  CODE	    0023	  99
+SM0				  BIT	      9F	  56
+SM1				  BIT	      9E	  55
+SM2				  BIT	      9D	  54
+SP				  DATA	      81	  13
+START				  CODE	    0100	1832
+STR_ALARMA			  CODE	    182A	1791
+STR_ALARMA_CONFIGURAR		  CODE	    18B1	1806
+STR_ALARMA_CONF_L1		  CODE	    18CC	1808
+STR_ALARMA_CONF_L2		  CODE	    18E7	1810
+STR_ALARMA_CONF_M1		  CODE	    1902	1812
+STR_ALARMA_CONF_M2		  CODE	    191D	1815
+STR_ALARMA_ESTABLECER		  CODE	    1860	1797
+STR_ALARMA_ESTABLECER_RUT	  CODE	    1879	1798
+STR_ALARMA_HORAS		  CODE	    187B	1800
+STR_ALARMA_HORAS_RUT		  CODE	    1894	1801
+STR_ALARMA_MINUTOS		  CODE	    1896	1803
+STR_ALARMA_MINUTOS_RUT		  CODE	    18AF	1804
+STR_ALARMA_ON_OFF		  CODE	    1845	1794
+STR_ALARMA_ON_OFF_RUT		  CODE	    185E	1795
+STR_ALARMA_RUN			  CODE	    1843	1792
+STR_BAJAR			  CODE	    1752	1766
+STR_BAJAR_RUT			  CODE	    176B	1767
+STR_INICIO			  CODE	    1701	1757
+STR_INICIO_RUT			  CODE	    171A	1758
+STR_LUZ				  CODE	    176D	1769
+STR_LUZ_ESTUDIO			  CODE	    17BE	1778
+STR_LUZ_ESTUDIO_DOWN		  CODE	    180F	1787
+STR_LUZ_ESTUDIO_DOWN_RUT	  CODE	    1828	1788
+STR_LUZ_ESTUDIO_ON		  CODE	    17D9	1781
+STR_LUZ_ESTUDIO_ON_RUT		  CODE	    17F2	1782
+STR_LUZ_ESTUDIO_RUT		  CODE	    17D7	1779
+STR_LUZ_ESTUDIO_UP		  CODE	    17F4	1784
+STR_LUZ_ESTUDIO_UP_RUT		  CODE	    180D	1785
+STR_LUZ_RUT			  CODE	    1786	1770
+STR_LUZ_TECHO			  CODE	    1788	1772
+STR_LUZ_TECHO_ON		  CODE	    17A3	1775
+STR_LUZ_TECHO_ON_RUT		  CODE	    17BC	1776
+STR_LUZ_TECHO_RUT		  CODE	    17A1	1773
+STR_PERSIANA			  CODE	    171C	1760
+STR_PERSIANA_RUT		  CODE	    1735	1761
+STR_RELOJ			  CODE	    1938	1817
+STR_RELOJ_HORAS			  CODE	    1953	1819
+STR_RELOJ_MINUTOS		  CODE	    196E	1821
+STR_SUBIR			  CODE	    1737	1763
+STR_SUBIR_RUT			  CODE	    1750	1764
+T0				  BIT	      B4	  68
+T1				  BIT	      B5	  69
+T2				  BIT	      90	  47
+T2CON				  DATA	      C8	  30
+T2EX				  BIT	      91	  48
+TB8				  BIT	      9B	  52
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 46
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+TCLK				  BIT	      CC	  82
+TCON				  DATA	      88	  17
+TECLADO_COUNT			  IDATA	      3A	 189
+TECLADO_ESPERAR			  NUMBER    0001	 202
+TECLADO_EXIT			  CODE	    119F	1380
+TECLADO_PEND			  BIT	      0C	 148
+TECLADO_PULSADO			  NUMBER    000A	 201
+TECLADO_REBOTES			  NUMBER    0006	 204
+TECLADO_TIME			  NUMBER    9C40	 200
+TECLADO_UPDATE			  CODE	    1100	1292
+TESTIGO_ALARMA			  NUMBER    0041	 256
+TESTIGO_LUZ_1			  NUMBER    0031	 254
+TESTIGO_LUZ_2			  NUMBER    0032	 255
+TESTIGO_MOTOR_1			  NUMBER    004C	 252
+TESTIGO_MOTOR_2			  NUMBER    0050	 253
+TF0				  BIT	      8D	  44
+TF1				  BIT	      8F	  46
+TF2				  BIT	      CF	  85
+TH0				  DATA	      8C	  21
+TH1				  DATA	      8D	  22
+TH2				  DATA	      CD	  34
+TI				  BIT	      99	  50
+TIME				  NUMBER    3CB0	 199
+TIMER0				  CODE	    000B	  96
+TIMER0_EXIT			  CODE	    023F	 340
+TIMER1				  CODE	    001B	  98
+TIMER2				  CODE	    002B	 100
+TIME_CONV			  CODE	    04FC	 652
+TL0				  DATA	      8A	  19
+TL1				  DATA	      8B	  20
+TL2				  DATA	      CC	  33
+TMOD				  DATA	      89	  18
+TR0				  BIT	      8C	  43
+TR1				  BIT	      8E	  45
+TR2				  BIT	      CA	  80
+TU_1B				  CODE	    1114	1307
+TU_1C				  CODE	    1126	1316
+TU_2A				  CODE	    1132	1323
+TU_2B				  CODE	    114A	1336
+TU_2C				  CODE	    115A	1344
+TU_3A				  CODE	    116C	1352
+TU_3B				  CODE	    117E	1363
+TU_3C				  CODE	    1190	1372
+TU_END				  CODE	    119C	1378
+TXD				  BIT	      B1	  65
+WAIT1				  CODE	    04B7	 605
+WR				  BIT	      B6	  70
